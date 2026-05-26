@@ -1,340 +1,737 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo — Auria AI</title>
-    <meta name="description" content="Fale ao vivo com a Auria — IA autônoma para centrais de monitoramento.">
-    <meta name="robots" content="noindex, nofollow">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auria — Experimente uma ligação</title>
+  <meta name="description" content="Converse ao vivo com a Auria, a inteligência artificial que cuida do monitoramento dos alarmes." />
+  <meta name="robots" content="noindex, nofollow" />
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%236d28d9'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z' fill='url(%23g)'/%3E%3C/svg%3E">
+  <!-- Brand fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- reCAPTCHA v2 -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-    <!-- reCAPTCHA v2 -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    :root {
+      --brand-primary: #6c0dc9;
+      --brand-glow:    #a155ff;
+      --brand-deep:    #2a0566;
+      --listen-primary: #0a8259;
+      --listen-glow:    #34d3a0;
+      --listen-deep:    #07332a;
+      --ink-100: rgba(255, 255, 255, 0.96);
+      --ink-70:  rgba(255, 255, 255, 0.72);
+      --ink-50:  rgba(255, 255, 255, 0.52);
+      --ink-30:  rgba(255, 255, 255, 0.30);
+      --surface-glass: rgba(255, 255, 255, 0.06);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-    <style>
-        :root {
-            --bg-primary: #08060e;
-            --bg-secondary: #0d0a16;
-            --bg-card: rgba(255,255,255,0.03);
-            --accent-1: #8b5cf6;
-            --accent-2: #a78bfa;
-            --accent-3: #6d28d9;
-            --accent-cyan: #06b6d4;
-            --accent-glow: rgba(139, 92, 246, 0.15);
-            --text-primary: #f1f0f5;
-            --text-secondary: #a8a3b5;
-            --text-muted: #6b6580;
-            --border: rgba(255,255,255,0.08);
-        }
+    *, *::before, *::after { box-sizing: border-box; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--ink-100);
+      background: #050018;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(108, 13, 201, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(161, 85, 255, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse at center, #0a0228 0%, #050010 70%, #02000a 100%);
+      z-index: -2;
+    }
 
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .orb-1 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(139,92,246,0.22), transparent 70%);
-            top: -200px; left: -120px;
-            animation: breathe 14s ease-in-out infinite;
-        }
-        .orb-2 {
-            width: 560px; height: 560px;
-            background: radial-gradient(circle, rgba(109,40,217,0.18), transparent 70%);
-            bottom: -220px; right: -160px;
-            animation: breathe 18s ease-in-out infinite reverse;
-        }
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
+    body::after {
+      content: "";
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      opacity: 0.45; mix-blend-mode: overlay; pointer-events: none; z-index: -1;
+    }
 
-        header {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 32px;
-            border-bottom: 1px solid var(--border);
-        }
+    /* ─── Layout ─── */
+    .stage {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 32px clamp(20px, 5vw, 64px);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-        .logo-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-        .logo-icon {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, var(--accent-3), var(--accent-1));
-            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
-        }
-        .logo-name {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--ink-70); font-size: 13px;
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+    .topbar .mark {
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 700; color: var(--ink-100);
+    }
+    .topbar .mark .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--brand-glow);
+      box-shadow: 0 0 12px var(--brand-glow);
+    }
 
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        .back-link:hover {
-            border-color: rgba(139,92,246,0.4);
-            color: var(--accent-2);
-            background: rgba(139,92,246,0.06);
-        }
-        .back-link svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2; fill: none; }
+    .center {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 36px; padding: 48px 0; text-align: center;
+    }
 
-        main {
-            position: relative;
-            z-index: 1;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 24px 64px;
-            text-align: center;
-            animation: pageIn 0.7s ease-out;
-        }
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .eyebrow {
+      font-size: 12px; letter-spacing: 0.32em;
+      text-transform: uppercase; color: var(--ink-50); font-weight: 600;
+    }
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 14px;
-            background: rgba(6,182,212,0.08);
-            border: 1px solid rgba(6,182,212,0.2);
-            border-radius: 100px;
-            font-size: 0.78rem;
-            font-weight: 500;
-            color: var(--accent-cyan);
-            margin-bottom: 24px;
-            letter-spacing: 0.02em;
-        }
-        .badge::before {
-            content: '';
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--accent-cyan);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.4); }
-        }
+    h1 {
+      margin: 0; font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1.15;
+      max-width: 720px;
+      background: linear-gradient(180deg, #ffffff 0%, #c8b6ff 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2rem, 5vw, 2.8rem);
-            font-weight: 700;
-            line-height: 1.15;
-            letter-spacing: -0.02em;
-            margin-bottom: 14px;
-        }
-        h1 .gradient {
-            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    .subhead {
+      margin: 0; font-size: clamp(15px, 1.5vw, 17px);
+      color: var(--ink-70); max-width: 560px; line-height: 1.6;
+    }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            max-width: 480px;
-            margin: 0 auto 40px;
-        }
+    /* ─── Orb ─── */
+    .orb-wrap {
+      position: relative; width: 280px; height: 280px;
+      display: flex; align-items: center; justify-content: center;
+    }
 
-        /* Card shared by both steps */
-        .card {
-            width: 100%;
-            max-width: 520px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 40px 32px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 60px rgba(139,92,246,0.08);
-        }
+    .orb {
+      position: absolute; inset: 60px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f0e2ff 0%, var(--brand-glow) 35%, var(--brand-primary) 70%, var(--brand-deep) 100%);
+      box-shadow:
+        0 0 60px rgba(161, 85, 255, 0.55),
+        0 0 120px rgba(108, 13, 201, 0.40),
+        inset 0 0 40px rgba(255, 255, 255, 0.15);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+      will-change: transform, filter;
+    }
 
-        /* Captcha step */
-        #captcha-step .card-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-        #captcha-step .card-sub {
-            color: var(--text-muted);
-            font-size: 0.88rem;
-            margin-top: -12px;
-        }
+    .ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(161, 85, 255, 0.25); pointer-events: none;
+    }
+    .ring.r1 { inset: 30px; }
+    .ring.r2 { inset: 0; border-color: rgba(161, 85, 255, 0.15); }
+    .ring.r3 {
+      inset: 45px; border-color: rgba(255, 255, 255, 0.08);
+      animation: spin 18s linear infinite;
+      border-top-color: rgba(161, 85, 255, 0.6);
+    }
 
-        /* Force reCAPTCHA into dark surroundings */
-        .g-recaptcha { filter: invert(0.88) hue-rotate(180deg); border-radius: 4px; overflow: hidden; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .btn-verify {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 28px;
-            background: linear-gradient(135deg, var(--accent-3), var(--accent-1));
-            border: none;
-            border-radius: 100px;
-            color: #fff;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: inherit;
-            cursor: pointer;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-        }
-        .btn-verify:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
-        .btn-verify:disabled { opacity: 0.4; cursor: not-allowed; }
+    .orb-wrap.idle .orb     { animation: breathe 4.2s ease-in-out infinite; }
+    .orb-wrap.connecting .orb { animation: breathe 1.6s ease-in-out infinite; filter: hue-rotate(-10deg) brightness(1.05); }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1.00); filter: brightness(1.00); }
+      50%      { transform: scale(1.04); filter: brightness(1.15); }
+    }
 
-        .error-msg {
-            color: #f87171;
-            font-size: 0.82rem;
-            display: none;
-        }
-        .error-msg.visible { display: block; }
+    .orb-wrap.listening .orb {
+      animation: breathe 3.4s ease-in-out infinite;
+      background: radial-gradient(circle at 35% 30%, #d4fbe9 0%, var(--listen-glow) 35%, var(--listen-primary) 70%, var(--listen-deep) 100%);
+      box-shadow:
+        0 0 50px rgba(52, 211, 160, 0.45),
+        0 0 110px rgba(10, 130, 89, 0.30),
+        inset 0 0 40px rgba(255, 255, 255, 0.15);
+      transition: background 0.45s ease, box-shadow 0.45s ease;
+    }
+    .orb-wrap.listening .ring.r1 { border-color: rgba(52, 211, 160, 0.50); box-shadow: 0 0 22px rgba(52, 211, 160, 0.25); }
+    .orb-wrap.listening .ring.r3 { border-top-color: rgba(52, 211, 160, 0.55); }
 
-        /* Agent step */
-        #agent-step { display: none; }
-        #agent-step.visible { display: flex; }
+    .orb-wrap.speaking .orb  { animation: none; transition: none; }
+    .orb-wrap.speaking .ring.r1 { border-color: rgba(161, 85, 255, 0.40); box-shadow: 0 0 18px rgba(161, 85, 255, 0.25); }
 
-        .agent-hint {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
+    .orb-wrap.ended .orb { animation: none; filter: saturate(0.4) brightness(0.55); }
 
-        elevenlabs-convai {
-            --el-convai-button-color: #8b5cf6;
-            --el-convai-button-text-color: #ffffff;
-        }
+    /* ─── Status ─── */
+    .status {
+      font-size: 14px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--ink-70);
+      min-height: 1.6em; transition: color 0.3s ease;
+    }
+    .status .led {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      margin-right: 10px; vertical-align: middle; background: var(--ink-30);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .stage[data-state="speaking"]  .status .led,
+    .stage[data-state="connecting"] .status .led { background: var(--brand-glow); box-shadow: 0 0 10px var(--brand-glow); }
+    .stage[data-state="listening"] .status .led  { background: var(--listen-glow); box-shadow: 0 0 10px var(--listen-glow); }
 
-        .disclaimer {
-            margin-top: 32px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            max-width: 400px;
-        }
+    /* ─── Form ─── */
+    .start-card {
+      width: min(480px, 100%);
+      padding: 32px 28px;
+      background: var(--surface-glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+      display: flex; flex-direction: column; gap: 16px;
+    }
 
-        @media (max-width: 600px) {
-            header { padding: 16px 20px; }
-            .card { padding: 28px 20px; border-radius: 16px; }
-        }
+    .start-card label {
+      display: block; font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--ink-50);
+      margin-bottom: 2px; font-weight: 600;
+    }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation: none !important; transition: none !important; }
-        }
-    </style>
+    .start-card input[type="text"] {
+      width: 100%; padding: 16px 18px;
+      font-family: inherit; font-size: 16px; color: var(--ink-100);
+      background: rgba(0, 0, 0, 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px; outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .start-card input[type="text"]::placeholder { color: var(--ink-30); }
+    .start-card input[type="text"]:focus {
+      border-color: var(--brand-glow);
+      background: rgba(0, 0, 0, 0.45);
+      box-shadow: 0 0 0 4px rgba(161, 85, 255, 0.15);
+    }
+
+    /* reCAPTCHA dark override */
+    .captcha-wrap { display: flex; justify-content: center; }
+    .g-recaptcha { filter: invert(0.88) hue-rotate(180deg); border-radius: 4px; overflow: hidden; }
+
+    button.primary {
+      width: 100%; padding: 16px 22px;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: white;
+      background: linear-gradient(135deg, var(--brand-glow) 0%, var(--brand-primary) 100%);
+      border: none; border-radius: 14px; cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      box-shadow: 0 12px 32px rgba(108, 13, 201, 0.40);
+    }
+    button.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 18px 44px rgba(108, 13, 201, 0.55); filter: brightness(1.06); }
+    button.primary:active:not(:disabled) { transform: translateY(0); }
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+
+    .end-call {
+      padding: 12px 24px; font-family: inherit;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--ink-70);
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 100px;
+      cursor: pointer; transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .end-call:hover { color: var(--ink-100); border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.04); }
+
+    .hint { font-size: 13px; color: var(--ink-50); max-width: 480px; line-height: 1.5; }
+
+    .error-banner {
+      width: min(480px, 100%); margin: 0 auto;
+      padding: 12px 16px;
+      background: rgba(220, 38, 38, 0.10);
+      border: 1px solid rgba(220, 38, 38, 0.30);
+      color: #fda4af; border-radius: 12px;
+      font-size: 13px; display: none; text-align: left;
+    }
+    .error-banner.show { display: block; }
+
+    /* ─── State-driven visibility ─── */
+    [data-show-when] { display: none; }
+    .stage[data-state="idle"]       [data-show-when~="idle"],
+    .stage[data-state="connecting"] [data-show-when~="connecting"],
+    .stage[data-state="listening"]  [data-show-when~="active"],
+    .stage[data-state="speaking"]   [data-show-when~="active"],
+    .stage[data-state="ended"]      [data-show-when~="ended"]      { display: block; }
+    .stage[data-state="idle"]       [data-show-when~="idle-flex"],
+    .stage[data-state="connecting"] [data-show-when~="connecting-flex"],
+    .stage[data-state="listening"]  [data-show-when~="active-flex"],
+    .stage[data-state="speaking"]   [data-show-when~="active-flex"],
+    .stage[data-state="ended"]      [data-show-when~="ended-flex"] { display: flex; }
+
+    .stage[data-state="idle"] .orb-wrap { display: none; }
+
+    /* ─── Camera monitors ─── */
+    .camera-monitor {
+      display: none; flex-direction: column;
+      align-items: center; gap: 8px; padding: 0;
+    }
+    .camera-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--ink-50);
+    }
+    .rec-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #e84d4d; box-shadow: 0 0 8px rgba(232, 77, 77, 0.6);
+      animation: rec-blink 1.4s ease-in-out infinite;
+    }
+    @keyframes rec-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    .camera-video {
+      width: 300px; max-width: 40vw;
+      aspect-ratio: 16 / 9; background: #0a0420;
+      border-radius: 10px;
+      border: 1px solid rgba(161, 85, 255, 0.18);
+      box-shadow: 0 0 24px rgba(108, 13, 201, 0.18), inset 0 0 18px rgba(0, 0, 0, 0.45);
+      object-fit: cover;
+    }
+
+    @media (prefers-reduced-motion: reduce) { .rec-dot { animation: none; opacity: 1; } }
+
+    /* ─── Three-column call scene ─── */
+    .call-scene {
+      align-items: center; justify-content: center;
+      gap: 40px; width: 100%;
+    }
+
+    .orb-column {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 24px;
+    }
+
+    @media (max-width: 860px) {
+      .call-scene { flex-direction: column; gap: 28px; }
+      .camera-video { width: 260px; max-width: 80vw; }
+    }
+
+    @media (max-width: 540px) {
+      .orb-wrap { width: 220px; height: 220px; }
+      .orb { inset: 48px; }
+      .ring.r1 { inset: 24px; }
+      .ring.r3 { inset: 36px; }
+    }
+
+    footer {
+      color: var(--ink-30); font-size: 12px; letter-spacing: 0.16em;
+      text-transform: uppercase; text-align: center; padding-top: 24px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb, .ring.r3 { animation: none !important; }
+      .orb { transition: none !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+  <main class="stage" id="stage" data-state="idle">
 
-    <header>
-        <a href="/" class="logo-link">
-            <div class="logo-icon" aria-hidden="true"></div>
-            <span class="logo-name">Auria AI</span>
-        </a>
-        <a href="/" class="back-link">
-            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            Voltar ao site
-        </a>
+    <header class="topbar">
+      <div class="mark"><span class="dot"></span> Auria</div>
+      <div>Demonstração ao vivo</div>
     </header>
 
-    <main>
-        <div class="badge">Demo ao vivo</div>
-        <h1>Fale com a <span class="gradient">Auria</span></h1>
-        <p class="subtitle">Converse com nosso agente de IA e veja como a Auria atua em tempo real numa central de monitoramento.</p>
+    <section class="center">
 
-        <!-- Step 1: captcha gate -->
-        <div id="captcha-step">
-            <div class="card">
-                <p class="card-title">Verificação rápida</p>
-                <p class="card-sub">Confirme que você é humano antes de iniciar.</p>
-                <!--
-                    Test key (always passes) — replace with your real site key from
-                    https://www.google.com/recaptcha/admin before going to production.
-                    Test site key:   6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-                -->
-                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onCaptchaSuccess"></div>
-                <p class="error-msg" id="captcha-error">Por favor, complete a verificação acima.</p>
-                <button class="btn-verify" id="verify-btn" disabled onclick="handleVerify()">
-                    Iniciar demo
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
+      <!-- IDLE: form -->
+      <div data-show-when="idle">
+        <p class="eyebrow">Experimente em primeira mão</p>
+      </div>
+      <h1 data-show-when="idle">
+        Atenda uma ligação<br />simulada da Auria.
+      </h1>
+
+      <form class="start-card" id="startForm" data-show-when="idle-flex" novalidate>
+        <div>
+          <label for="visitorName">Seu nome</label>
+          <input
+            id="visitorName"
+            name="visitorName"
+            type="text"
+            placeholder="Como devemos te chamar?"
+            autocomplete="given-name"
+            maxlength="50"
+          />
         </div>
 
-        <!-- Step 2: agent (hidden until captcha passes) -->
-        <div id="agent-step" class="card">
-            <elevenlabs-convai agent-id="agent_3001k2zsg2pyerctjd22bskqbqx0"></elevenlabs-convai>
-            <p class="agent-hint">Clique no botão acima para iniciar a conversa</p>
+        <div class="captcha-wrap">
+          <div
+            class="g-recaptcha"
+            data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            data-callback="onCaptchaSuccess"
+            data-expired-callback="onCaptchaExpired"
+          ></div>
         </div>
 
-        <p class="disclaimer">Este é um ambiente de demonstração. As respostas são geradas por IA e não representam operações reais de monitoramento.</p>
-    </main>
+        <button type="submit" class="primary" id="startButton" disabled>
+          Receber ligação da Auria
+        </button>
+      </form>
 
-    <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
-    <script>
-        function onCaptchaSuccess() {
-            document.getElementById('verify-btn').disabled = false;
-            document.getElementById('captcha-error').classList.remove('visible');
-        }
+      <p class="hint" data-show-when="idle">
+        Permita o acesso ao microfone quando o navegador solicitar. A conversa fica apenas entre você e a Auria — nenhum dado pessoal é armazenado.
+      </p>
 
-        function handleVerify() {
-            if (!grecaptcha.getResponse()) {
-                document.getElementById('captcha-error').classList.add('visible');
-                return;
-            }
-            document.getElementById('captcha-step').style.display = 'none';
-            document.getElementById('agent-step').classList.add('visible');
+      <!-- Error banner: globally visible across all states -->
+      <div
+        class="error-banner"
+        id="errorBanner"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      ></div>
+
+      <!-- Call scene: 3-column layout when active (cameras flank the orb) -->
+      <div class="call-scene" data-show-when="connecting-flex active-flex ended-flex">
+
+        <!-- Left camera — street -->
+        <figure class="camera-monitor" id="cameraMonitorStreet" data-show-when="active-flex">
+          <figcaption class="camera-label">
+            <span class="rec-dot" aria-hidden="true"></span>
+            <span>Câmera 1 — rua em frente à loja</span>
+          </figcaption>
+          <video
+            class="camera-video"
+            id="cameraVideoStreet"
+            muted
+            playsinline
+            preload="auto"
+            loop
+            aria-label="Câmera de segurança da rua em frente à loja"
+          >
+            <source src="./static/demo-cam-street.mp4" type="video/mp4" />
+          </video>
+        </figure>
+
+        <!-- Centre: orb + status + call actions -->
+        <div class="orb-column">
+          <div class="orb-wrap idle" id="orbWrap">
+            <div class="ring r2"></div>
+            <div class="ring r1"></div>
+            <div class="ring r3"></div>
+            <div class="orb" id="orb"></div>
+          </div>
+
+          <div class="status" id="status">
+            <span class="led"></span><span id="statusText">Aguardando…</span>
+          </div>
+
+          <button class="end-call" id="endButton" type="button" data-show-when="active">
+            Encerrar ligação
+          </button>
+
+          <div data-show-when="ended">
+            <p class="subhead" style="margin-bottom: 22px;">
+              Obrigada pela conversa. Quer experimentar de novo ou conhecer a Auria por dentro?
+            </p>
+            <button class="primary" id="restartButton" type="button" style="max-width: 320px;">
+              Recomeçar
+            </button>
+          </div>
+        </div>
+
+        <!-- Right camera — service hall -->
+        <figure class="camera-monitor" id="cameraMonitorHall" data-show-when="active-flex">
+          <figcaption class="camera-label">
+            <span class="rec-dot" aria-hidden="true"></span>
+            <span>Câmera 2 — salão de atendimento</span>
+          </figcaption>
+          <video
+            class="camera-video"
+            id="cameraVideoHall"
+            muted
+            playsinline
+            preload="auto"
+            loop
+            aria-label="Câmera de segurança do salão de atendimento da loja"
+          >
+            <source src="./static/demo-cam-hall.mp4" type="video/mp4" />
+          </video>
+        </figure>
+
+      </div>
+
+    </section>
+
+    <footer>auria-ai.com.br</footer>
+  </main>
+
+  <!-- reCAPTCHA callbacks must be global (not inside ES module) -->
+  <script>
+    var _captchaSolved = false;
+
+    function onCaptchaSuccess() {
+      _captchaSolved = true;
+      var btn = document.getElementById("startButton");
+      if (btn && !btn.dataset.connecting) btn.disabled = false;
+    }
+
+    function onCaptchaExpired() {
+      _captchaSolved = false;
+      document.getElementById("startButton").disabled = true;
+    }
+  </script>
+
+  <script type="module">
+    import { Conversation } from "https://esm.sh/@elevenlabs/client@latest";
+
+    const AGENT_ID = "agent_3001k2zsg2pyerctjd22bskqbqx0";
+
+    // ── Hardcoded vision scripts for the retail false-alarm scenario ──────────
+    // Scenario: vibration sensor on side door triggered during business hours.
+    // Cam1 = street exterior; Cam2 = service hall interior.
+    // Descriptions are delivered to the agent via client tools when it calls
+    // get_vision_cam_street / get_vision_cam_hall.
+    const VISION_SCRIPT_CAM1 = [
+      { start: 0,   end: 25,  description: "Rua tranquila em frente à loja. Calçada vazia, sem pedestres próximos à entrada." },
+      { start: 25,  end: 50,  description: "Pedestre passa normalmente pela calçada sem se aproximar da loja." },
+      { start: 50,  end: 75,  description: "Nenhuma atividade suspeita. Entrada da loja completamente desobstruída.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO — CÂMERA EXTERNA]: Rua em frente à loja está tranquila, sem aproximação suspeita à entrada." },
+      { start: 75,  end: 100, description: "Veículo estaciona na rua ao lado. Ocupantes não se aproximam da loja." },
+      { start: 100, end: 120, description: "Área externa calma. Nenhuma movimentação suspeita detectada na rua ou calçada." },
+    ];
+
+    const VISION_SCRIPT_CAM2 = [
+      { start: 0,  end: 20, description: "Salão de atendimento iluminado e em operação normal. Dois funcionários visíveis, clientes presentes." },
+      { start: 20, end: 40, description: "Funcionária se desloca em direção à porta lateral do salão. Clientes aguardando no balcão." },
+      { start: 40, end: 55, description: "Funcionária abre a porta lateral para entrada de mercadoria — ação que provavelmente acionou o sensor de vibração.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO — CÂMERA SALÃO]: Funcionária abriu a porta lateral durante o expediente — causa provável do acionamento do sensor." },
+      { start: 55, end: 85, description: "Porta lateral fechada. Salão com movimento normal de clientes e funcionários." },
+      { start: 85, end: 120, description: "Loja em funcionamento pleno. Nenhuma irregularidade ou comportamento suspeito identificado." },
+    ];
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const stage         = document.getElementById("stage");
+    const orbWrap       = document.getElementById("orbWrap");
+    const orb           = document.getElementById("orb");
+    const statusText    = document.getElementById("statusText");
+    const errorBanner   = document.getElementById("errorBanner");
+    const startForm     = document.getElementById("startForm");
+    const startButton   = document.getElementById("startButton");
+    const endButton     = document.getElementById("endButton");
+    const restartButton = document.getElementById("restartButton");
+    const visitorNameInput = document.getElementById("visitorName");
+    const cameraVideoStreet = document.getElementById("cameraVideoStreet");
+    const cameraVideoHall   = document.getElementById("cameraVideoHall");
+
+    let conversation  = null;
+    let volumeRAF     = null;
+    let sessionStartMs = null;
+    let announceTimers = [];
+
+    // ── State machine ─────────────────────────────────────────────────────────
+    function setState(next) {
+      stage.dataset.state = next;
+      orbWrap.classList.remove("idle", "connecting", "listening", "speaking", "ended");
+      if (next !== "idle") orbWrap.classList.add(next);
+      const labels = {
+        idle:       "Aguardando…",
+        connecting: "Conectando com a Auria…",
+        listening:  "Sua vez de falar",
+        speaking:   "Auria está falando",
+        ended:      "Ligação encerrada",
+      };
+      statusText.textContent = labels[next] || labels.idle;
+    }
+
+    function showError(msg) { errorBanner.textContent = msg; errorBanner.classList.add("show"); }
+    function clearError()   { errorBanner.classList.remove("show"); errorBanner.textContent = ""; }
+
+    // ── Audio-reactive orb ────────────────────────────────────────────────────
+    const SMOOTHING_ATTACK  = 0.45;
+    const SMOOTHING_RELEASE = 0.12;
+    let smoothedVolume = 0;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function startVolumeLoop() {
+      if (prefersReducedMotion.matches) return;
+      smoothedVolume = 0;
+      const tick = () => {
+        if (!conversation) return;
+        if (stage.dataset.state !== "speaking") {
+          orb.style.transform = orb.style.filter = orb.style.boxShadow = "";
+          smoothedVolume *= 0.85;
+          volumeRAF = requestAnimationFrame(tick);
+          return;
         }
-    </script>
+        let raw = 0;
+        try { raw = conversation.getOutputVolume() || 0; } catch (_) {}
+        const k = raw > smoothedVolume ? SMOOTHING_ATTACK : SMOOTHING_RELEASE;
+        smoothedVolume += (raw - smoothedVolume) * k;
+        const c  = Math.pow(Math.min(smoothedVolume, 1), 0.55);
+        const og = 55 + c * 90, oa = 0.45 + c * 0.45;
+        orb.style.transform  = `scale(${(0.88 + c * 0.45).toFixed(3)})`;
+        orb.style.filter     = `brightness(${(0.95 + c * 0.55).toFixed(3)})`;
+        orb.style.boxShadow  =
+          `0 0 ${og.toFixed(0)}px rgba(161,85,255,${oa.toFixed(2)}),` +
+          `0 0 ${(og*1.8).toFixed(0)}px rgba(108,13,201,${(oa*0.6).toFixed(2)}),` +
+          `inset 0 0 ${(30+c*30).toFixed(0)}px rgba(255,255,255,${(0.15+c*0.2).toFixed(2)})`;
+        volumeRAF = requestAnimationFrame(tick);
+      };
+      volumeRAF = requestAnimationFrame(tick);
+    }
+
+    function stopVolumeLoop() {
+      if (volumeRAF) cancelAnimationFrame(volumeRAF);
+      volumeRAF = null;
+      orb.style.transform = orb.style.filter = orb.style.boxShadow = "";
+      smoothedVolume = 0;
+    }
+
+    // ── Vision sub-system ─────────────────────────────────────────────────────
+    function elapsedSeconds() {
+      return sessionStartMs === null ? 0 : (Date.now() - sessionStartMs) / 1000;
+    }
+
+    function lookupVision(script, elapsed) {
+      for (const e of script) {
+        if (elapsed >= e.start && elapsed < e.end) return e.description;
+      }
+      return "A imagem está estável, sem mudanças relevantes no momento.";
+    }
+
+    function scheduleAnnouncements(script, conv) {
+      return script
+        .filter(e => e.announce)
+        .map(e => setTimeout(() => {
+          try {
+            if (typeof conv.sendContextualUpdate === "function")
+              conv.sendContextualUpdate(e.announce_text || `[CÂMERA]: ${e.description}`);
+          } catch (_) {}
+        }, Math.max(0, e.start * 1000)));
+    }
+
+    function clearAnnouncements() {
+      announceTimers.forEach(clearTimeout);
+      announceTimers = [];
+    }
+
+    function startVisionPlayback() {
+      sessionStartMs = Date.now();
+      for (const vid of [cameraVideoStreet, cameraVideoHall]) {
+        if (!vid) continue;
+        try { vid.currentTime = 0; } catch (_) {}
+        vid.play().catch(err => console.warn("Vision video autoplay blocked:", err));
+      }
+    }
+
+    function stopVisionPlayback() {
+      clearAnnouncements();
+      sessionStartMs = null;
+      [cameraVideoStreet, cameraVideoHall].forEach(v => v && v.pause());
+    }
+
+    // ── Conversation ──────────────────────────────────────────────────────────
+    async function startConversation(name) {
+      clearError();
+      setState("connecting");
+      startButton.dataset.connecting = "1";
+      startButton.disabled = true;
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop());
+      } catch (_) {
+        showError("Precisamos do seu microfone para a Auria conversar com você. Permita o acesso e tente de novo.");
+        resetToIdle();
+        return;
+      }
+
+      try {
+        conversation = await Conversation.startSession({
+          agentId: AGENT_ID,
+          dynamicVariables: { visitor_name: name },
+          clientTools: {
+            get_vision_cam_street: () => lookupVision(VISION_SCRIPT_CAM1, elapsedSeconds()),
+            get_vision_cam_hall:   () => lookupVision(VISION_SCRIPT_CAM2, elapsedSeconds()),
+          },
+          onModeChange: ({ mode }) => setState(mode === "speaking" ? "speaking" : "listening"),
+          onDisconnect: () => {
+            stopVolumeLoop();
+            stopVisionPlayback();
+            setState("ended");
+            conversation = null;
+          },
+          onError: (err) => {
+            console.error("ElevenLabs error:", err);
+            stopVolumeLoop();
+            stopVisionPlayback();
+            conversation = null;
+            setState("ended");
+            showError("A conversa caiu. Tente recomeçar.");
+          },
+        });
+
+        startVisionPlayback();
+        announceTimers = [
+          ...scheduleAnnouncements(VISION_SCRIPT_CAM1, conversation),
+          ...scheduleAnnouncements(VISION_SCRIPT_CAM2, conversation),
+        ];
+        startVolumeLoop();
+      } catch (err) {
+        console.error(err);
+        showError("Não foi possível iniciar a conversa. Verifique sua conexão e tente de novo.");
+        resetToIdle();
+      }
+    }
+
+    function resetToIdle() {
+      delete startButton.dataset.connecting;
+      if (window._captchaSolved) startButton.disabled = false;
+      setState("idle");
+    }
+
+    // ── Event listeners ───────────────────────────────────────────────────────
+    startForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = visitorNameInput.value.trim();
+      if (!name) {
+        visitorNameInput.focus();
+        return;
+      }
+      startConversation(name);
+    });
+
+    endButton.addEventListener("click", async () => {
+      if (!conversation) { stopVolumeLoop(); stopVisionPlayback(); setState("ended"); return; }
+      try {
+        await conversation.endSession();
+      } catch (err) {
+        console.error("Failed to end session:", err);
+        showError("Não conseguimos encerrar a ligação agora. Tente de novo em alguns segundos.");
+        return;
+      }
+      conversation = null;
+      stopVolumeLoop();
+      stopVisionPlayback();
+      setState("ended");
+    });
+
+    restartButton.addEventListener("click", () => {
+      clearError();
+      visitorNameInput.value = "";
+      // Reset captcha so user must verify again on the new attempt
+      if (typeof grecaptcha !== "undefined") {
+        try { grecaptcha.reset(); } catch (_) {}
+      }
+      window._captchaSolved = false;
+      startButton.disabled = true;
+      setState("idle");
+      visitorNameInput.focus();
+    });
+
+    setState("idle");
+  </script>
 </body>
 </html>

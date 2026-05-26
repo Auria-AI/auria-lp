@@ -1,3 +1,6 @@
 .vercel
 .DS_Store
 .env*.local
+
+# Raw video source files (deployed copies live in demo/static/)
+demo_*.mp4
