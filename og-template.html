@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>OG Image Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { background: #08060e; }
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #f1f0f5;
+        }
+        .og {
+            width: 1200px;
+            height: 630px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.28), transparent 55%),
+                radial-gradient(circle at 85% 80%, rgba(109, 40, 217, 0.22), transparent 55%),
+                #08060e;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .og::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+            pointer-events: none;
+        }
+        .top {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            position: relative;
+            z-index: 1;
+        }
+        .mark {
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
+            filter: drop-shadow(0 0 30px rgba(139, 92, 246, 0.45));
+        }
+        .brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 44px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #f1f0f5;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+        .badge {
+            display: inline-block;
+            padding: 8px 18px;
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.32);
+            border-radius: 100px;
+            color: #a78bfa;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 78px;
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+        h1 .gradient {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+        .tagline {
+            font-size: 28px;
+            color: #a8a3b5;
+            font-weight: 400;
+            max-width: 880px;
+            line-height: 1.4;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+            z-index: 1;
+        }
+        .url {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px;
+            color: #6b6580;
+            letter-spacing: 0.02em;
+        }
+        .accent-line {
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, #6d28d9, #8b5cf6);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="og" id="og">
+        <div class="top">
+            <div class="mark"></div>
+            <div class="brand">AURIA AI</div>
+        </div>
+        <div class="content">
+            <div class="badge">Inteligência Autônoma</div>
+            <h1>A IA que está <span class="gradient">redefinindo segurança</span></h1>
+            <div class="tagline">Operadores virtuais para centrais de monitoramento. Observa, interpreta e age — com velocidade, precisão e escala.</div>
+        </div>
+        <div class="footer">
+            <div class="url">auria-ai.com.br</div>
+            <div class="accent-line"></div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo — Auria AI</title>
+    <meta name="description" content="Demo Auria AI — em breve.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- Favicon (mesmo do site principal) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%236d28d9'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z' fill='url(%23g)'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #08060e;
+            --bg-secondary: #0d0a16;
+            --accent-1: #8b5cf6;
+            --accent-2: #a78bfa;
+            --accent-3: #6d28d9;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+            --text-primary: #f1f0f5;
+            --text-secondary: #a8a3b5;
+            --text-muted: #6b6580;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Background orbs (mesmo estilo do site) */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 {
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 70%);
+            top: -180px;
+            left: -120px;
+            animation: breathe 14s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 540px;
+            height: 540px;
+            background: radial-gradient(circle, rgba(109, 40, 217, 0.2), transparent 70%);
+            bottom: -200px;
+            right: -160px;
+            animation: breathe 18s ease-in-out infinite reverse;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 560px;
+            padding: 48px 32px;
+            text-align: center;
+            animation: pageIn 0.8s ease-out;
+        }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--accent-3), var(--accent-1));
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
+            margin-bottom: 32px;
+            filter: drop-shadow(0 0 30px var(--accent-glow));
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--accent-2);
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
+        }
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+        h1 .gradient {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 36px;
+            max-width: 440px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 22px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+        .back-link:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(139, 92, 246, 0.06);
+            color: var(--accent-2);
+        }
+        .back-link svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .meta {
+            margin-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <main class="container">
+        <div class="logo" aria-label="Auria AI"></div>
+        <div class="badge">Em construção</div>
+        <h1>Demo <span class="gradient">em breve</span></h1>
+        <p>Estamos preparando uma demonstração ao vivo da Auria. Volte em breve — ou fale conosco para um acesso antecipado.</p>
+        <a href="/" class="back-link">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar para o site
+        </a>
+        <div class="meta">auria-ai.com.br/demo</div>
+    </main>
+</body>
+</html>
