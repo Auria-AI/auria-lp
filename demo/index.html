@@ -397,7 +397,7 @@
         <figure class="camera-monitor" id="cameraMonitorStreet" data-show-when="active-flex">
           <figcaption class="camera-label">
             <span class="rec-dot" aria-hidden="true"></span>
-            <span>Câmera 1 — rua em frente à loja</span>
+            <span>Câmera — fundos da residência</span>
           </figcaption>
           <video
             class="camera-video"
@@ -406,7 +406,7 @@
             playsinline
             preload="auto"
             loop
-            aria-label="Câmera de segurança da rua em frente à loja"
+            aria-label="Câmera de segurança da área dos fundos da residência"
           >
             <source src="/demo/static/demo-cam-street.mp4" type="video/mp4" />
           </video>
@@ -443,7 +443,7 @@
         <figure class="camera-monitor" id="cameraMonitorHall" data-show-when="active-flex">
           <figcaption class="camera-label">
             <span class="rec-dot" aria-hidden="true"></span>
-            <span>Câmera 2 — salão de atendimento</span>
+            <span>Câmera — entrada lateral</span>
           </figcaption>
           <video
             class="camera-video"
@@ -452,7 +452,7 @@
             playsinline
             preload="auto"
             loop
-            aria-label="Câmera de segurança do salão de atendimento da loja"
+            aria-label="Câmera de segurança da entrada lateral da residência"
           >
             <source src="/demo/static/demo-cam-hall.mp4" type="video/mp4" />
           </video>
@@ -486,29 +486,36 @@
 
     const AGENT_ID = "agent_3001k2zsg2pyerctjd22bskqbqx0";
 
-    // ── Hardcoded vision scripts for the retail false-alarm scenario ──────────
-    // Scenario: vibration sensor on side door triggered during business hours.
-    // Cam1 = street exterior; Cam2 = service hall interior.
-    // Descriptions are delivered to the agent via client tools when it calls
-    // get_vision_cam_street / get_vision_cam_hall.
-    const VISION_SCRIPT_CAM1 = [
-      { start: 0,   end: 25,  description: "Rua tranquila em frente à loja. Calçada vazia, sem pedestres próximos à entrada." },
-      { start: 25,  end: 50,  description: "Pedestre passa normalmente pela calçada sem se aproximar da loja." },
-      { start: 50,  end: 75,  description: "Nenhuma atividade suspeita. Entrada da loja completamente desobstruída.",
+    // ── Vision script — residential back-gate break-in scenario ──────────────
+    // Source: Auria-Backend demo_agent.yaml vision_script section.
+    // Delivered via get_vision_update() client tool (single camera, fundos).
+    const VISION_SCRIPT = [
+      { start: 0,  end: 6,
+        description: "Imagem da área dos fundos da residência. Calçada vazia, iluminação noturna baixa, nenhum movimento visível." },
+      { start: 6,  end: 14,
+        description: "Um vulto aparece no canto direito do enquadramento, caminhando devagar em direção ao portão dos fundos. Usa moletom escuro com capuz, dificultando a identificação do rosto.",
         announce: true,
-        announce_text: "[ATUALIZAÇÃO — CÂMERA EXTERNA]: Rua em frente à loja está tranquila, sem aproximação suspeita à entrada." },
-      { start: 75,  end: 100, description: "Veículo estaciona na rua ao lado. Ocupantes não se aproximam da loja." },
-      { start: 100, end: 120, description: "Área externa calma. Nenhuma movimentação suspeita detectada na rua ou calçada." },
-    ];
-
-    const VISION_SCRIPT_CAM2 = [
-      { start: 0,  end: 20, description: "Salão de atendimento iluminado e em operação normal. Dois funcionários visíveis, clientes presentes." },
-      { start: 20, end: 40, description: "Funcionária se desloca em direção à porta lateral do salão. Clientes aguardando no balcão." },
-      { start: 40, end: 55, description: "Funcionária abre a porta lateral para entrada de mercadoria — ação que provavelmente acionou o sensor de vibração.",
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: Uma pessoa com moletom escuro e capuz acabou de aparecer na área dos fundos, caminhando em direção ao portão." },
+      { start: 14, end: 24,
+        description: "A pessoa para na frente do portão da varanda. Olha para os dois lados, parece estar verificando se há alguém por perto. Postura tensa, movimentos cuidadosos.",
         announce: true,
-        announce_text: "[ATUALIZAÇÃO — CÂMERA SALÃO]: Funcionária abriu a porta lateral durante o expediente — causa provável do acionamento do sensor." },
-      { start: 55, end: 85, description: "Porta lateral fechada. Salão com movimento normal de clientes e funcionários." },
-      { start: 85, end: 120, description: "Loja em funcionamento pleno. Nenhuma irregularidade ou comportamento suspeito identificado." },
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: A pessoa parou na frente do portão da varanda e está olhando para os lados, como se checasse se há alguém por perto. Postura suspeita." },
+      { start: 24, end: 34,
+        description: "A pessoa encosta a mão no portão da varanda e começa a forçar a maçaneta. Movimento contínuo, tentando abrir. Não há mais dúvida de que é uma tentativa de invasão.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: A pessoa está agora forçando a maçaneta do portão da varanda. Parece tentativa de invasão clara — não é mais ambíguo." },
+      { start: 34, end: 42,
+        description: "A pessoa percebe a câmera no canto superior, olha diretamente para a lente, congela por um instante e dá um passo para trás.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: A pessoa acabou de notar a câmera, olhou direto para a lente e está recuando." },
+      { start: 42, end: 52,
+        description: "A pessoa vira-se e sai correndo na direção oposta, em direção à rua. Some do enquadramento em poucos segundos.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: A pessoa saiu correndo na direção da rua, sumiu do enquadramento." },
+      { start: 52, end: 120,
+        description: "Calçada vazia novamente. Nenhum movimento. Iluminação noturna, área dos fundos como estava antes. A ocorrência parece estar contida.",
+        announce: true,
+        announce_text: "[ATUALIZAÇÃO DE CÂMERA]: A área voltou a ficar vazia. Não há mais ninguém à vista." },
     ];
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -632,6 +639,54 @@
       [cameraVideoStreet, cameraVideoHall].forEach(v => v && v.pause());
     }
 
+    // ── BRT time helpers ──────────────────────────────────────────────────────
+    const HOUR_WORDS = {
+      0:"zero hora",1:"uma",2:"duas",3:"três",4:"quatro",5:"cinco",6:"seis",
+      7:"sete",8:"oito",9:"nove",10:"dez",11:"onze",12:"meio-dia",13:"treze",
+      14:"quatorze",15:"quinze",16:"dezesseis",17:"dezessete",18:"dezoito",
+      19:"dezenove",20:"vinte",21:"vinte e uma",22:"vinte e duas",23:"vinte e três",
+    };
+    const MINUTE_UNITS = {
+      0:"",1:"um",2:"dois",3:"três",4:"quatro",5:"cinco",6:"seis",7:"sete",
+      8:"oito",9:"nove",10:"dez",11:"onze",12:"doze",13:"treze",14:"quatorze",
+      15:"quinze",16:"dezesseis",17:"dezessete",18:"dezoito",19:"dezenove",
+    };
+    const MINUTE_TENS = {2:"vinte",3:"trinta",4:"quarenta",5:"cinquenta"};
+
+    function minutesInWords(m) {
+      if (m === 30) return "meia";
+      if (m < 20) return MINUTE_UNITS[m];
+      const tens = Math.floor(m / 10), units = m % 10;
+      return units === 0 ? MINUTE_TENS[tens] : `${MINUTE_TENS[tens]} e ${MINUTE_UNITS[units]}`;
+    }
+
+    function nowInBRT() {
+      // Shift epoch to BRT (UTC-3) so getUTCHours/getUTCMinutes read BRT wall time
+      return new Date(Date.now() - 3 * 3600 * 1000);
+    }
+
+    function shiftMinutes(d, minutes) {
+      return new Date(d.getTime() - minutes * 60000);
+    }
+
+    function toSpokenTime(d) {
+      const h = d.getUTCHours(), m = d.getUTCMinutes();
+      const hw = HOUR_WORDS[h];
+      if (m === 0) {
+        if (h === 0 || h === 12) return hw;
+        if (h === 1 || h === 21) return `${hw} hora`;
+        return `${hw} horas`;
+      }
+      return `${hw} e ${minutesInWords(m)}`;
+    }
+
+    function brazilianGreeting(d) {
+      const h = d.getUTCHours();
+      if (h >= 6 && h < 12) return "Bom dia";
+      if (h >= 12 && h < 18) return "Boa tarde";
+      return "Boa noite";
+    }
+
     // ── Conversation ──────────────────────────────────────────────────────────
     async function startConversation(name) {
       clearError();
@@ -649,12 +704,18 @@
       }
 
       try {
+        const now      = nowInBRT();
+        const discharge = shiftMinutes(now, 2);
         conversation = await Conversation.startSession({
           agentId: AGENT_ID,
-          dynamicVariables: { visitor_name: name },
+          dynamicVariables: {
+            visitor_name:          name,
+            greeting:              brazilianGreeting(now),
+            current_time_phrase:   toSpokenTime(now),
+            discharge_time_phrase: toSpokenTime(discharge),
+          },
           clientTools: {
-            get_vision_cam_street: () => lookupVision(VISION_SCRIPT_CAM1, elapsedSeconds()),
-            get_vision_cam_hall:   () => lookupVision(VISION_SCRIPT_CAM2, elapsedSeconds()),
+            get_vision_update: () => lookupVision(VISION_SCRIPT, elapsedSeconds()),
           },
           onModeChange: ({ mode }) => setState(mode === "speaking" ? "speaking" : "listening"),
           onDisconnect: () => {
@@ -674,10 +735,7 @@
         });
 
         startVisionPlayback();
-        announceTimers = [
-          ...scheduleAnnouncements(VISION_SCRIPT_CAM1, conversation),
-          ...scheduleAnnouncements(VISION_SCRIPT_CAM2, conversation),
-        ];
+        announceTimers = scheduleAnnouncements(VISION_SCRIPT, conversation);
         startVolumeLoop();
       } catch (err) {
         console.error(err);
