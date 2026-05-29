@@ -191,12 +191,6 @@
       display: flex; flex-direction: column; gap: 16px;
     }
 
-    .start-card label {
-      display: block; font-size: 12px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--ink-50);
-      margin-bottom: 2px; font-weight: 600;
-    }
-
     .start-card input[type="text"] {
       width: 100%; padding: 16px 18px;
       font-family: inherit; font-size: 16px; color: var(--ink-100);
@@ -345,12 +339,12 @@
 
       <form class="start-card" id="startForm" data-show-when="idle-flex" novalidate>
         <div>
-          <label for="visitorName">Seu nome</label>
           <input
             id="visitorName"
             name="visitorName"
             type="text"
             placeholder="Como devemos te chamar?"
+            aria-label="Seu nome"
             autocomplete="given-name"
             maxlength="50"
           />
