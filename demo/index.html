@@ -447,6 +447,11 @@
 
     const AGENT_ID = "agent_7101ks09txc0ey3swd1t1vxb9pn1";
 
+    // Inert in production. Append ?debug=1 to the URL to show a live overlay
+    // that confirms the camera videos stay in lockstep with the wall clock
+    // that drives visionUpdate() (see startDebugOverlay below).
+    const DEBUG = new URLSearchParams(location.search).has("debug");
+
     const stage         = document.getElementById("stage");
     const orbWrap       = document.getElementById("orbWrap");
     const orb           = document.getElementById("orb");
@@ -553,11 +558,58 @@
         try { vid.currentTime = 0; } catch (_) {}
         vid.play().catch(err => console.warn("Vision video autoplay blocked:", err));
       }
+      startDebugOverlay();
     }
 
     function stopVisionPlayback() {
       sessionStartMs = null;
       [cameraVideoStreet, cameraVideoHall].forEach(v => v && v.pause());
+      stopDebugOverlay();
+    }
+
+    // ── Debug overlay (?debug=1) ──────────────────────────────────────────────
+    // Live readout to verify A/V sync: each camera's playback position vs the
+    // elapsed wall clock, the resulting drift, and the exact string the agent
+    // receives from visionUpdate(). "drift" = video.currentTime − elapsed;
+    // it should hover near 0. A growing magnitude (or PAUSED) means the video
+    // has fallen out of step with the descriptions.
+    let debugRAF = null;
+    let debugEl  = null;
+
+    function renderDebug() {
+      const elapsed = elapsedSeconds();
+      const signed  = (n) => (n >= 0 ? "+" : "") + n.toFixed(2);
+      const rows = [`elapsed: ${elapsed.toFixed(2)}s`];
+      for (const [label, vid] of [["street", cameraVideoStreet], ["hall", cameraVideoHall]]) {
+        if (!vid) { rows.push(`${label}: (no element)`); continue; }
+        const drift = vid.currentTime - elapsed;
+        const flag  = vid.paused ? "  ⏸ PAUSED" : Math.abs(drift) > 0.5 ? "  ⚠ DRIFT" : "";
+        rows.push(`${label}: t=${vid.currentTime.toFixed(2)}s  drift=${signed(drift)}s${flag}`);
+      }
+      rows.push("", visionUpdate());
+      debugEl.textContent = rows.join("\n");
+      debugRAF = requestAnimationFrame(renderDebug);
+    }
+
+    function startDebugOverlay() {
+      if (!DEBUG) return;
+      if (!debugEl) {
+        debugEl = document.createElement("pre");
+        debugEl.id = "visionDebug";
+        debugEl.style.cssText =
+          "position:fixed;bottom:12px;left:12px;z-index:9999;max-width:44ch;margin:0;" +
+          "padding:10px 12px;background:rgba(8,6,14,0.92);color:var(--accent-2,#a78bfa);" +
+          "font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;" +
+          "white-space:pre-wrap;border:1px solid var(--accent-3,#6d28d9);" +
+          "border-radius:6px;pointer-events:none;";
+        document.body.appendChild(debugEl);
+      }
+      if (!debugRAF) renderDebug();
+    }
+
+    function stopDebugOverlay() {
+      if (debugRAF) cancelAnimationFrame(debugRAF);
+      debugRAF = null;
     }
 
     // ── BRT time helpers ──────────────────────────────────────────────────────
