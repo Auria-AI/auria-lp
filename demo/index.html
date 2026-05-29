@@ -637,6 +637,18 @@
           },
           clientTools: {
             get_vision_update: () => visionUpdate(),
+            // Legacy aliases — earlier agent revisions called per-camera tools.
+            // Map them to the combined update so a tool-name drift between the
+            // agent and this page never surfaces "tool is not defined on client".
+            get_vision_cam_street: () => visionUpdate(),
+            get_vision_cam_hall:   () => visionUpdate(),
+          },
+          // Safety net: if the agent ever calls a tool we don't implement, the
+          // SDK routes it here instead of firing onError (which would drop the
+          // whole conversation). Note the SDK ignores the return value and sends
+          // no tool result, so this only keeps the call alive and logs the name.
+          onUnhandledClientToolCall: (call) => {
+            console.warn("Unhandled ElevenLabs client tool:", call?.tool_name);
           },
           onModeChange: ({ mode }) => setState(mode === "speaking" ? "speaking" : "listening"),
           onDisconnect: () => {
