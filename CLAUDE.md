@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Static marketing landing page for **Auria AI** (autonomous AI for security monitoring centers), deployed at `https://www.auria-ai.com.br/`. No build system, no package manager — everything is plain HTML/CSS/JavaScript.
 
+## Git workflow
+
+Commit and push directly to `main` — no feature branches, no pull requests. Vercel auto-deploys from `main`.
+
 ## Development
 
 To preview, serve the directory with any static file server:
