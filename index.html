@@ -1,2007 +1,381 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auria AI — Inteligência Autônoma em Segurança</title>
-    <meta name="description" content="Auria AI — IA autônoma redefinindo segurança. Operadores virtuais para centrais de monitoramento.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auria AI — SuperAgentes de IA para centrais de monitoramento</title>
+<meta name="description" content="A Auria desenvolve SuperAgentes de IA que recebem ocorrências, analisam câmeras, ligam para clientes, decidem e executam ações — em tempo real. Já em produção, 24/7.">
 
-    <!-- Open Graph / LinkedIn / WhatsApp -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.auria-ai.com.br/">
-    <meta property="og:title" content="Auria AI — A IA que está redefinindo segurança">
-    <meta property="og:description" content="Operadores virtuais com inteligência autônoma para centrais de monitoramento. Observa, interpreta e age — com velocidade, precisão e escala.">
-    <meta property="og:image" content="https://www.auria-ai.com.br/og-image.png">
-    <meta property="og:locale" content="pt_BR">
-    <meta property="og:locale:alternate" content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.auria-ai.com.br/">
+<meta property="og:title" content="Auria AI — A próxima geração das centrais de monitoramento será operada por IA">
+<meta property="og:description" content="SuperAgentes de IA que recebem ocorrências, analisam imagens, conversam com clientes e executam ações — em tempo real.">
+<meta property="og:image" content="https://www.auria-ai.com.br/og-image.png">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Auria AI — A próxima geração das centrais de monitoramento será operada por IA">
+<meta name="twitter:image" content="https://www.auria-ai.com.br/og-image.png">
 
-    <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Auria AI — A IA que está redefinindo segurança">
-    <meta name="twitter:description" content="Operadores virtuais com inteligência autônoma para centrais de monitoramento.">
-    <meta name="twitter:image" content="https://www.auria-ai.com.br/og-image.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z' fill='%23A100F2'/%3E%3C/svg%3E">
 
-    <!-- Favicon (inline SVG) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%236d28d9'/%3E%3Cstop offset='100%25' stop-color='%238b5cf6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z' fill='url(%23g)'/%3E%3C/svg%3E">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #08060e;
-            --bg-secondary: #0d0a16;
-            --bg-card: rgba(255,255,255,0.03);
-            --bg-card-hover: rgba(255,255,255,0.06);
-            --accent-1: #8b5cf6;
-            --accent-2: #a78bfa;
-            --accent-3: #6d28d9;
-            --accent-glow: rgba(139, 92, 246, 0.15);
-            --accent-cyan: #06b6d4;
-            --text-primary: #f1f0f5;
-            --text-secondary: #a8a3b5;
-            --text-muted: #6b6580;
-            --border: rgba(255,255,255,0.06);
-            --border-hover: rgba(139, 92, 246, 0.3);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 80px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            line-height: 1.6;
-            animation: pageIn 0.8s ease-out;
-        }
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ─── GLOBAL UTILITIES ─── */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .section-label {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            color: var(--text-primary);
-        }
-
-        .section-subtitle {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
-            max-width: 620px;
-            line-height: 1.75;
-        }
-
-        /* ─── ANIMATED BG ─── */
-        .bg-grid { display: none; }
-
-        .bg-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(140px);
-            opacity: 0.2;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .bg-orb-1 {
-            width: 800px; height: 800px;
-            background: radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%);
-            top: -300px; left: -300px;
-        }
-        .bg-orb-2 {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(6,182,212,0.06), transparent 70%);
-            bottom: -200px; right: -200px;
-        }
-
-        /* Subtle breathing on orbs */
-        .bg-orb-1 { animation: breathe 12s ease-in-out infinite; }
-        .bg-orb-2 { animation: breathe 16s ease-in-out infinite reverse; }
-        @keyframes breathe {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(1.08); }
-        }
-
-        /* ─── NAVBAR ─── */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 16px 0;
-            transition: all 0.3s;
-            backdrop-filter: blur(0px);
-        }
-        .navbar.scrolled {
-            background: rgba(8,6,14,0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 0;
-        }
-        .navbar .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .nav-logo .logo-icon {
-            width: 32px; height: 32px;
-            background: linear-gradient(135deg, var(--accent-3), var(--accent-1));
-            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
-            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H30V30H0V0ZM10 10H20V20H10V10Z'/%3E%3C/svg%3E") no-repeat center / contain;
-        }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            position: relative;
-        }
-        .nav-links a:hover { color: var(--text-primary); }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px; left: 0;
-            width: 0; height: 2px;
-            background: var(--accent-1);
-            transition: width 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
-        .nav-cta {
-            background: var(--accent-1);
-            color: white !important;
-            padding: 9px 22px;
-            border-radius: 100px;
-            font-weight: 600 !important;
-            font-size: 0.83rem !important;
-            transition: all 0.3s ease !important;
-        }
-        .nav-cta::after { display: none !important; }
-        .nav-cta:hover {
-            background: var(--accent-2);
-        }
-
-        /* ─── LANG TOGGLE ─── */
-        .lang-toggle {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .lang-btn {
-            padding: 6px 12px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            font-family: 'Space Grotesk', sans-serif;
-            color: var(--text-muted);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.25s;
-        }
-        .lang-btn.active {
-            background: var(--accent-1);
-            color: white;
-        }
-
-        /* ─── MOBILE NAV ─── */
-        .nav-hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 4px;
-        }
-        .nav-hamburger span {
-            width: 24px;
-            height: 2px;
-            background: var(--text-primary);
-            transition: all 0.3s;
-        }
-
-        /* ─── HERO ─── */
-        .hero {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding-top: 120px;
-            padding-bottom: 100px;
-        }
-        .hero-content {
-            text-align: center;
-            max-width: 860px;
-            margin: 0 auto;
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: none;
-            padding: 0;
-            font-size: 0.78rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 28px;
-            animation: fadeInUp 0.8s ease-out;
-        }
-        .hero-badge .dot {
-            width: 8px; height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: pulse-dot 2s ease-in-out infinite;
-        }
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-            50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(34,197,94,0); }
-        }
-        .hero h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(3.2rem, 7.5vw, 5.5rem);
-            font-weight: 700;
-            line-height: 1.02;
-            margin-bottom: 32px;
-            letter-spacing: -0.02em;
-            animation: fadeInUp 0.8s ease-out 0.1s both;
-        }
-        .hero h1 .gradient-text {
-            background: linear-gradient(90deg, var(--accent-2), var(--accent-1), var(--accent-2));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 8s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 200% center; }
-        }
-        .hero-description {
-            font-size: clamp(1.1rem, 2vw, 1.3rem);
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 48px;
-            line-height: 1.7;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease-out 0.3s both;
-        }
-        .btn-primary {
-            background: var(--accent-1);
-            color: white;
-            padding: 15px 36px;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            background: var(--accent-2);
-            transform: none;
-            box-shadow: 0 0 40px rgba(139,92,246,0.2);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-secondary);
-            padding: 15px 36px;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255,255,255,0.12);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .btn-secondary:hover {
-            border-color: rgba(255,255,255,0.25);
-            color: var(--text-primary);
-        }
-
-        /* ─── HERO VISUAL ─── */
-        .hero-visual {
-            margin-top: 60px;
-            animation: fadeInUp 1s ease-out 0.5s both;
-        }
-        .hero-mockup {
-            max-width: 900px;
-            margin: 0 auto;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            padding: 20px 0;
-            position: relative;
-        }
-        .hero-mockup::before { display: none; }
-        .mockup-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            position: relative;
-            z-index: 1;
-        }
-        .mockup-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.4s ease;
-            animation: float 6s ease-in-out infinite;
-        }
-        .mockup-card:nth-child(2) { animation-delay: -2s; }
-        .mockup-card:nth-child(3) { animation-delay: -4s; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .mockup-card:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.08);
-        }
-        .mockup-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .mockup-status .indicator {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 8px rgba(34,197,94,0.5);
-        }
-        .mockup-status .indicator.alert {
-            background: #f59e0b;
-            box-shadow: 0 0 8px rgba(245,158,11,0.5);
-            animation: pulse-dot 1.5s ease-in-out infinite;
-        }
-        .mockup-status span {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .mockup-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-        .mockup-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        .mockup-bar {
-            height: 4px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 4px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-        .mockup-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            background: linear-gradient(90deg, var(--accent-1), var(--accent-cyan));
-            animation: fillBar 3s ease-out infinite;
-        }
-        @keyframes fillBar {
-            0% { width: 0%; }
-            50% { width: 85%; }
-            100% { width: 100%; }
-        }
-
-        /* ─── ABOUT SECTION ─── */
-        .about {
-            position: relative;
-            z-index: 1;
-            padding: 100px 0;
-        }
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-        .about-visual {
-            position: relative;
-        }
-        .about-visual-inner {
-            width: 100%;
-            aspect-ratio: 1;
-            max-width: 440px;
-            margin: 0 auto;
-            position: relative;
-        }
-        .about-ring {
-            position: absolute;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            animation: spin-slow 30s linear infinite;
-        }
-        .about-ring-1 { inset: 0; }
-        .about-ring-2 { inset: 15%; border-color: rgba(139,92,246,0.15); animation-direction: reverse; animation-duration: 25s; }
-        .about-ring-3 { inset: 30%; border-color: rgba(6,182,212,0.1); animation-duration: 20s; }
-        @keyframes spin-slow { to { transform: rotate(360deg); } }
-        .about-core {
-            position: absolute;
-            inset: 38%;
-            background: var(--accent-1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 60px rgba(139,92,246,0.15);
-        }
-        .about-core svg { width: 40%; height: 40%; }
-        .about-node {
-            position: absolute;
-            width: 8px; height: 8px;
-            background: var(--accent-2);
-            border-radius: 50%;
-            box-shadow: none;
-            opacity: 0.5;
-        }
-        .about-node:nth-child(5) { top: 0; left: 50%; transform: translateX(-50%); }
-        .about-node:nth-child(6) { bottom: 0; left: 50%; transform: translateX(-50%); }
-        .about-node:nth-child(7) { left: 0; top: 50%; transform: translateY(-50%); }
-        .about-node:nth-child(8) { right: 0; top: 50%; transform: translateY(-50%); }
-
-        /* ─── FEATURES ─── */
-        .features {
-            position: relative;
-            z-index: 1;
-            padding: 100px 0;
-        }
-        .features-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .features-header .section-subtitle {
-            margin: 0 auto;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .feature-card {
-            background: transparent;
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0;
-            padding: 32px 0;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-        .feature-card::before { display: none; }
-        .feature-card:hover {
-            border-color: rgba(255,255,255,0.1);
-        }
-        .feature-icon {
-            width: 36px; height: 36px;
-            background: transparent;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .feature-icon svg {
-            width: 28px; height: 28px;
-            stroke: var(--accent-2);
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .feature-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-primary);
-        }
-        .feature-card p {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.65;
-        }
-
-        /* ─── HOW IT WORKS ─── */
-        .how-it-works {
-            position: relative;
-            z-index: 1;
-            padding: 88px 0;
-        }
-        .how-it-works-header {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-        .how-it-works-header .section-subtitle {
-            margin: 0 auto;
-        }
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            position: relative;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        .steps-container::before {
-            content: '';
-            position: absolute;
-            top: 36px;
-            left: 25%;
-            right: 25%;
-            height: 1px;
-            background: rgba(255,255,255,0.06);
-            z-index: 0;
-        }
-        .step-card {
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        .step-number {
-            width: 72px; height: 72px;
-            border-radius: 50%;
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 28px;
-            position: relative;
-        }
-        .step-number::after { display: none; }
-        .step-number svg {
-            width: 28px; height: 28px;
-            stroke: var(--text-secondary);
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            position: relative;
-            z-index: 1;
-        }
-        .step-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-        .step-card p {
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* ─── SECURITY IN A BOX ─── */
-        .product {
-            position: relative;
-            z-index: 1;
-            padding: 88px 0;
-        }
-        .product-wrapper {
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            padding: 0;
-            position: relative;
-        }
-        .product-wrapper::before { display: none; }
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-        .product-features {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-            margin-top: 32px;
-        }
-        .product-feature {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-        .product-feature-icon {
-            width: 32px; height: 32px;
-            min-width: 32px;
-            background: transparent;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2px;
-        }
-        .product-feature-icon svg {
-            width: 22px; height: 22px;
-            stroke: var(--accent-2);
-            fill: none;
-            stroke-width: 1.5;
-        }
-        .product-feature h4 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-        .product-feature p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-        .product-visual {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .product-metric-card {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0;
-            padding: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        .product-metric-card:hover {
-            border-color: rgba(255,255,255,0.1);
-        }
-        .product-metric-card:last-child { border-bottom: none; }
-        .pmc-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-        }
-        .pmc-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .pmc-badge {
-            padding: 4px 12px;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .pmc-badge.green { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); }
-        .pmc-badge.cyan { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); }
-        .pmc-badge.purple { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.08); }
-
-        /* ─── ARTICLES ─── */
-        .articles {
-            position: relative;
-            z-index: 1;
-            padding: 88px 0;
-        }
-        .articles-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 48px;
-        }
-        .articles-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-        .article-card {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-        }
-        .article-card:hover {
-            border-color: rgba(255,255,255,0.12);
-        }
-        .article-thumb {
-            height: 180px;
-            background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(6,182,212,0.05));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .article-thumb::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 20px,
-                rgba(255,255,255,0.02) 20px,
-                rgba(255,255,255,0.02) 21px
-            );
-        }
-        .article-thumb svg {
-            width: 48px; height: 48px;
-            stroke: var(--accent-2);
-            fill: none;
-            stroke-width: 1;
-            opacity: 0.5;
-        }
-        .article-body {
-            padding: 28px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .article-tag {
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--accent-2);
-            margin-bottom: 12px;
-        }
-        .article-body h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            line-height: 1.35;
-            margin-bottom: 12px;
-            color: var(--text-primary);
-        }
-        .article-body p {
-            font-size: 0.88rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            flex: 1;
-        }
-        .article-read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent-2);
-            margin-top: 16px;
-            transition: gap 0.2s;
-        }
-        .article-card:hover .article-read-more { gap: 10px; }
-
-        /* ─── CTA ─── */
-        .cta {
-            position: relative;
-            z-index: 1;
-            padding: 88px 0;
-        }
-        .cta-box {
-            background: transparent;
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            border-radius: 0;
-            padding: 100px 0;
-            text-align: center;
-            position: relative;
-        }
-        .cta-box::before { display: none; }
-        .cta-box .section-title {
-            position: relative;
-            z-index: 1;
-        }
-        .cta-box .section-subtitle {
-            margin: 0 auto 40px;
-            position: relative;
-            z-index: 1;
-        }
-        .cta-box .btn-primary {
-            position: relative;
-            z-index: 1;
-            font-size: 1.05rem;
-            padding: 16px 40px;
-        }
-
-        /* ─── FOOTER ─── */
-        .footer {
-            position: relative;
-            z-index: 1;
-            padding: 60px 0 30px;
-            border-top: 1px solid var(--border);
-        }
-        .footer-top {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 48px;
-        }
-        .footer-brand .nav-logo { margin-bottom: 16px; }
-        .footer-brand p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.6;
-            max-width: 320px;
-        }
-        .footer-col h4 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-        .footer-col a {
-            display: block;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 4px 0;
-            transition: color 0.2s;
-        }
-        .footer-col a:hover { color: var(--text-primary); }
-        .footer-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-            font-size: 0.82rem;
-            color: var(--text-muted);
-        }
-        .footer-social {
-            display: flex;
-            gap: 16px;
-        }
-        .footer-social a {
-            width: 36px; height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .footer-social a:hover {
-            border-color: var(--border-hover);
-            color: var(--accent-2);
-        }
-
-        /* ─── BEFORE / AFTER ─── */
-        .before-after {
-            position: relative;
-            z-index: 1;
-            padding: 100px 0;
-        }
-        .before-after-header {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-        .before-after-header .section-subtitle {
-            margin: 0 auto;
-        }
-        .ba-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 20px;
-            overflow: hidden;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .ba-column {
-            padding: 48px 44px;
-            background: var(--bg-primary);
-        }
-        .ba-column-label {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 32px;
-        }
-        .ba-column.before .ba-column-label { color: var(--text-muted); }
-        .ba-column.after .ba-column-label { color: var(--accent-2); }
-        .ba-items {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .ba-item {
-            font-size: 0.95rem;
-            line-height: 1.55;
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-        .ba-column.before .ba-item { color: var(--text-muted); }
-        .ba-column.after .ba-item { color: var(--text-secondary); }
-        .ba-item-icon {
-            min-width: 20px;
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ba-item-icon svg {
-            width: 16px; height: 16px;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .ba-column.before .ba-item-icon svg { stroke: rgba(255,255,255,0.2); }
-        .ba-column.after .ba-item-icon svg { stroke: var(--accent-2); }
-
-        @media (max-width: 768px) {
-            .ba-grid { grid-template-columns: 1fr; }
-            .ba-column { padding: 36px 28px; }
-        }
-
-        /* ─── USE CASES ─── */
-        .use-cases {
-            position: relative;
-            z-index: 1;
-            padding: 100px 0;
-        }
-        .use-cases-header {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-        .use-cases-header .section-subtitle {
-            margin: 0 auto;
-        }
-        .uc-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            max-width: 960px;
-            margin: 0 auto;
-        }
-        .uc-card {
-            text-align: center;
-            padding: 40px 24px;
-            border-left: 1px solid rgba(255,255,255,0.06);
-            transition: all 0.4s ease;
-        }
-        .uc-card:first-child { border-left: none; }
-        .uc-card:hover {
-            background: rgba(255,255,255,0.02);
-        }
-        .uc-icon {
-            margin-bottom: 24px;
-        }
-        .uc-icon svg {
-            width: 32px; height: 32px;
-            stroke: var(--text-muted);
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: stroke 0.3s;
-        }
-        .uc-card:hover .uc-icon svg { stroke: var(--accent-2); }
-        .uc-card h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-        .uc-card p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.55;
-        }
-
-        @media (max-width: 768px) {
-            .uc-grid { grid-template-columns: repeat(2, 1fr); }
-            .uc-card { border-bottom: 1px solid rgba(255,255,255,0.06); }
-            .uc-card:nth-child(2n+1) { border-left: none; }
-        }
-        @media (max-width: 480px) {
-            .uc-grid { grid-template-columns: 1fr; }
-            .uc-card { border-left: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-            .uc-card:last-child { border-bottom: none; }
-        }
-
-        /* ─── FAQ ─── */
-        .faq {
-            position: relative;
-            z-index: 1;
-            padding: 100px 0;
-        }
-        .faq-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .faq-list {
-            max-width: 720px;
-            margin: 0 auto;
-        }
-        .faq-item {
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-        .faq-question {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600;
-            text-align: left;
-            padding: 28px 0;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            transition: color 0.2s;
-        }
-        .faq-question:hover { color: var(--accent-2); }
-        .faq-question svg {
-            min-width: 20px;
-            width: 20px; height: 20px;
-            stroke: var(--text-muted);
-            fill: none;
-            stroke-width: 1.5;
-            transition: transform 0.3s ease;
-        }
-        .faq-item.open .faq-question svg {
-            transform: rotate(45deg);
-        }
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.3s ease;
-        }
-        .faq-item.open .faq-answer {
-            max-height: 300px;
-        }
-        .faq-answer p {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            padding-bottom: 28px;
-        }
-
-        /* ─── HUMAN IN THE LOOP ─── */
-        .hitl {
-            position: relative;
-            z-index: 1;
-            padding: 88px 0;
-        }
-        .hitl-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-        .hitl-header .section-subtitle {
-            margin: 0 auto;
-        }
-        .hitl-diagram {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 0;
-            align-items: stretch;
-        }
-        .hitl-column {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            padding: 40px 36px;
-            transition: all 0.4s ease;
-        }
-        .hitl-column:hover {
-            border-color: rgba(255,255,255,0.1);
-        }
-        .hitl-column-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 28px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-        .hitl-column-icon {
-            width: 44px; height: 44px;
-            min-width: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hitl-column-icon.ai {
-            background: transparent;
-            border: none;
-        }
-        .hitl-column-icon.human {
-            background: transparent;
-            border: none;
-        }
-        .hitl-column-icon svg {
-            width: 22px; height: 22px;
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .hitl-column-icon.ai svg { stroke: var(--accent-2); }
-        .hitl-column-icon.human svg { stroke: #22c55e; }
-        .hitl-column-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-        }
-        .hitl-column-subtitle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-        .hitl-items {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .hitl-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            font-size: 0.92rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-        .hitl-item-dot {
-            width: 8px; height: 8px;
-            min-width: 8px;
-            border-radius: 50%;
-            margin-top: 6px;
-        }
-        .hitl-item-dot.ai {
-            background: var(--accent-1);
-            box-shadow: 0 0 8px rgba(139,92,246,0.4);
-        }
-        .hitl-item-dot.human {
-            background: #22c55e;
-            box-shadow: 0 0 8px rgba(34,197,94,0.4);
-        }
-        .hitl-bridge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            position: relative;
-        }
-        .hitl-bridge-line {
-            width: 2px;
-            flex: 1;
-            background: linear-gradient(180deg, var(--accent-1), #22c55e);
-            border-radius: 2px;
-            position: relative;
-        }
-        .hitl-bridge-label {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 16px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            white-space: nowrap;
-            position: relative;
-            z-index: 1;
-        }
-        .hitl-bridge-arrow {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hitl-bridge-arrow svg {
-            stroke: var(--text-muted);
-            fill: none;
-            stroke-width: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .hitl-diagram {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            .hitl-bridge {
-                flex-direction: row;
-                padding: 16px 0;
-                gap: 12px;
-            }
-            .hitl-bridge-line {
-                width: auto;
-                height: 2px;
-                flex: 1;
-            }
-            .hitl-bridge-arrow { transform: rotate(90deg); }
-        }
-
-        /* ─── ANIMATIONS ─── */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.6s ease-out;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 1024px) {
-            .about-grid { grid-template-columns: 1fr; gap: 48px; }
-            .about-visual { order: -1; }
-            .about-visual-inner { max-width: 320px; }
-            .product-grid { grid-template-columns: 1fr; gap: 40px; }
-            .steps-container { max-width: 100%; }
-            .steps-container::before { display: none; }
-            .footer-top { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .nav-hamburger { display: flex; }
-            .nav-links.open {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%; left: 0; right: 0;
-                background: rgba(8,6,14,0.95);
-                backdrop-filter: blur(20px);
-                padding: 24px;
-                gap: 16px;
-                border-bottom: 1px solid var(--border);
-            }
-            .features-grid { grid-template-columns: 1fr; }
-            .articles-grid { grid-template-columns: 1fr; }
-            .product-wrapper { padding: 32px; }
-            .cta-box { padding: 48px 24px; }
-            .mockup-grid { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 2.4rem; }
-            .footer-top { grid-template-columns: 1fr; gap: 32px; }
-            .articles-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-        }
-        @media (max-width: 480px) {
-            .steps-container { grid-template-columns: 1fr; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<div class="bg-grid"></div>
-<div class="bg-orb bg-orb-1"></div>
-<div class="bg-orb bg-orb-2"></div>
-
-<!-- ─── NAVBAR ─── -->
-<nav class="navbar" id="navbar">
-    <div class="container">
-        <a href="#" class="nav-logo">
-            <div class="logo-icon" aria-label="Auria AI"></div>
-            AURIA AI
-        </a>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#solution" data-pt="O que Fazemos" data-en="What We Do">O que Fazemos</a></li>
-            <li><a href="#product" data-pt="Como Opera" data-en="How It Operates">Como Opera</a></li>
-            <li><a href="#articles" data-pt="Artigos" data-en="Articles">Artigos</a></li>
-            <li>
-                <div class="lang-toggle">
-                    <button class="lang-btn active" id="langPt" onclick="setLang('pt')">PT</button>
-                    <button class="lang-btn" id="langEn" onclick="setLang('en')">EN</button>
-                </div>
-            </li>
-            <li><a href="#cta" class="nav-cta" data-pt="Fale Conosco" data-en="Get in Touch">Fale Conosco</a></li>
-        </ul>
-        <button class="nav-hamburger" onclick="toggleNav()" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
-    </div>
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#top" class="logo"><span class="logo__mark"><i></i></span>Auria<span class="logo__sub">AI</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#problema" data-pt="O Problema" data-en="The Problem">O Problema</a></li>
+      <li><a href="#como-funciona" data-pt="Como Funciona" data-en="How It Works">Como Funciona</a></li>
+      <li><a href="#aplicacoes" data-pt="Aplicações" data-en="Applications">Aplicações</a></li>
+      <li>
+        <div class="lang">
+          <button id="langPt" class="active" onclick="setLang('pt')">PT</button>
+          <button id="langEn" onclick="setLang('en')">EN</button>
+        </div>
+      </li>
+      <li><a href="#contato" class="btn btn-primary" data-pt="Entre em contato" data-en="Get in touch">Entre em contato</a></li>
+    </ul>
+    <button class="nav-burger" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
-<!-- ─── HERO ─── -->
-<section class="hero">
-    <div class="container">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="dot"></span>
-                <span data-pt="Inteligência Autônoma para Segurança" data-en="Autonomous Intelligence for Security">Inteligência Autônoma para Segurança</span>
-            </div>
-            <h1>
-                <span data-pt="A IA que está" data-en="The AI that is">A IA que está</span><br>
-                <span class="gradient-text" data-pt="redefinindo segurança" data-en="redefining security">redefinindo segurança</span>
-            </h1>
-            <p class="hero-description" data-pt="Observa. Interpreta. Age. A Auria automatiza monitoramento e resposta a incidentes com velocidade, precisão e escala que operações humanas não alcançam." data-en="Observes. Interprets. Acts. Auria automates monitoring and incident response with speed, accuracy, and scale that human operations can't match.">Observa. Interpreta. Age. A Auria automatiza monitoramento e resposta a incidentes com velocidade, precisão e escala que operações humanas não alcançam.</p>
-            <div class="hero-buttons">
-                <a href="#cta" class="btn-primary" data-pt="Fale com a Auria" data-en="Talk to Auria">Fale com a Auria <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-                <a href="#product" class="btn-secondary" data-pt="Veja como funciona" data-en="See how it works">Veja como funciona <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
-            </div>
-        </div>
-        <div class="hero-visual">
-            <div class="hero-mockup">
-                <div class="mockup-grid">
-                    <div class="mockup-card">
-                        <div class="mockup-status">
-                            <div class="indicator"></div>
-                            <span data-pt="Observar" data-en="Observe">Observar</span>
-                        </div>
-                        <div class="mockup-label" data-pt="Câmeras, sensores, alarmes" data-en="Cameras, sensors, alarms">Câmeras, sensores, alarmes</div>
-                        <div class="mockup-value" style="font-size:1.1rem" data-pt="Múltiplos sinais, um entendimento" data-en="Multiple signals, one understanding">Múltiplos sinais, um entendimento</div>
-                        <div class="mockup-bar"><div class="mockup-bar-fill" style="width:100%"></div></div>
-                    </div>
-                    <div class="mockup-card">
-                        <div class="mockup-status">
-                            <div class="indicator"></div>
-                            <span data-pt="Interpretar" data-en="Interpret">Interpretar</span>
-                        </div>
-                        <div class="mockup-label" data-pt="Contexto, políticas, padrões" data-en="Context, policies, patterns">Contexto, políticas, padrões</div>
-                        <div class="mockup-value" style="font-size:1.1rem" data-pt="Distinguir risco real de ruído" data-en="Distinguish real risk from noise">Distinguir risco real de ruído</div>
-                        <div class="mockup-bar"><div class="mockup-bar-fill" style="animation-delay:-1s"></div></div>
-                    </div>
-                    <div class="mockup-card">
-                        <div class="mockup-status">
-                            <div class="indicator alert"></div>
-                            <span data-pt="Agir" data-en="Act">Agir</span>
-                        </div>
-                        <div class="mockup-label" data-pt="Coordenação e resposta" data-en="Coordination & response">Coordenação e resposta</div>
-                        <div class="mockup-value" style="font-size:1.1rem" data-pt="Autônoma, imediata, escalável" data-en="Autonomous, immediate, scalable">Autônoma, imediata, escalável</div>
-                        <div class="mockup-bar"><div class="mockup-bar-fill" style="animation-delay:-2s"></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ═══ HERO ═══ -->
+<header class="hero" id="top">
+  <div class="hero__glow"></div>
+  <div class="container">
+    <div class="hero__badge"><span class="dot"></span><span data-pt="Operadores Digitais de IA" data-en="Digital AI Operators">Operadores Digitais de IA</span></div>
+    <h1 class="h-display">
+      <span data-pt="A próxima geração das centrais de monitoramento " data-en="The next generation of monitoring centers ">A próxima geração das centrais de monitoramento </span><em data-pt="será operada por IA." data-en="will be operated by AI.">será operada por IA.</em>
+    </h1>
+    <p class="lead" data-pt="A Auria desenvolve SuperAgentes de IA que analisam ocorrências, verificam imagens, conversam com clientes por telefone e WhatsApp, decidem e executam ações — em tempo real." data-en="Auria builds AI SuperAgents that analyze events, verify footage, talk to clients by phone and WhatsApp, decide and execute actions — in real time.">A Auria desenvolve SuperAgentes de IA que analisam ocorrências, verificam imagens, conversam com clientes por telefone e WhatsApp, decidem e executam ações — em tempo real.</p>
+    <div class="hero__actions">
+      <a href="#contato" class="btn btn-primary" data-pt="Entre em contato" data-en="Get in touch">Entre em contato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="#como-funciona" class="btn btn-ghost" data-pt="Veja como funciona" data-en="See how it works">Veja como funciona <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
     </div>
+    <div class="hero__signals">
+      <div class="hero__signal"><b data-pt="Recebe" data-en="Receives">Recebe</b><span data-pt="alarmes, sensores e câmeras" data-en="alarms, sensors and cameras">alarmes, sensores e câmeras</span></div>
+      <div class="hero__signal"><b data-pt="Decide" data-en="Decides">Decide</b><span data-pt="com a regra do cliente" data-en="by the client's rules">com a regra do cliente</span></div>
+      <div class="hero__signal"><b data-pt="Age" data-en="Acts">Age</b><span data-pt="e escala para o humano quando precisa" data-en="and escalates to a human when needed">e escala para o humano quando precisa</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PIPELINE ═══ -->
+<section class="pipe-band reveal">
+  <div class="container">
+    <div class="pipe-head">
+      <span class="kicker" data-pt="Em Tempo Real" data-en="In Real Time">Em Tempo Real</span>
+      <h2 class="pipe-title"><span data-pt="Do alarme à ação, " data-en="From alarm to action, ">Do alarme à ação, </span><em data-pt="em um só fluxo." data-en="in a single flow.">em um só fluxo.</em></h2>
+    </div>
+    <div class="pipe" id="pipe">
+      <svg class="pipe-svg" id="pipeSvg" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="pipeGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#5301C0"></stop>
+            <stop offset="55%" stop-color="#A100F2"></stop>
+            <stop offset="100%" stop-color="#C44CFF"></stop>
+          </linearGradient>
+        </defs>
+        <path id="pipeBase" class="pipe-base" fill="none"></path>
+        <path id="pipeGlow" class="pipe-glow" fill="none"></path>
+      </svg>
+      <div class="pipe-node" data-i="0"><span class="pn-dot"></span><span class="pn-n">01</span><span class="pn-l" data-pt="Recebe" data-en="Receives">Recebe</span></div>
+      <div class="pipe-node" data-i="1"><span class="pn-dot"></span><span class="pn-n">02</span><span class="pn-l" data-pt="Analisa" data-en="Analyzes">Analisa</span></div>
+      <div class="pipe-node" data-i="2"><span class="pn-dot"></span><span class="pn-n">03</span><span class="pn-l" data-pt="Liga" data-en="Calls">Liga</span></div>
+      <div class="pipe-node" data-i="3"><span class="pn-dot"></span><span class="pn-n">04</span><span class="pn-l" data-pt="Decide" data-en="Decides">Decide</span></div>
+      <div class="pipe-node" data-i="4"><span class="pn-dot"></span><span class="pn-n">05</span><span class="pn-l" data-pt="Executa" data-en="Executes">Executa</span></div>
+      <div class="pipe-node" data-i="5"><span class="pn-dot"></span><span class="pn-n">06</span><span class="pn-l" data-pt="Escala" data-en="Escalates">Escala</span></div>
+    </div>
+  </div>
 </section>
 
-
-<!-- ─── SOLUTION: VIRTUAL OPERATORS ─── -->
-<section class="how-it-works fade-in" id="solution">
-    <div class="container">
-        <div class="how-it-works-header">
-            <div class="section-label" data-pt="Primeira Aplicação" data-en="First Application">Primeira Aplicação</div>
-            <h2 class="section-title" data-pt="Operadores Virtuais para Centrais de Monitoramento" data-en="Virtual Operators for Monitoring Centers">Operadores Virtuais para Centrais de Monitoramento</h2>
-            <p class="section-subtitle" data-pt="Inteligência autônoma onde o impacto é mais direto: a central de monitoramento. A IA faz o trabalho repetitivo. Humanos atuam onde são insubstituíveis." data-en="Autonomous intelligence where the impact is most direct: the monitoring center. AI handles the repetitive work. Humans act where they're irreplaceable.">Inteligência autônoma onde o impacto é mais direto: a central de monitoramento. A IA faz o trabalho repetitivo. Humanos atuam onde são insubstituíveis.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                </div>
-                <h3 data-pt="Seus Serviços, Muito Melhores" data-en="Your Services, Much Better">Seus Serviços, Muito Melhores</h3>
-                <p data-pt="Coordenação autônoma de ocorrências. Ação imediata, sem depender de disponibilidade humana. Escala com a demanda." data-en="Autonomous event coordination. Immediate action, without depending on human availability. Scales with demand.">Coordenação autônoma de ocorrências. Ação imediata, sem depender de disponibilidade humana. Escala com a demanda.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <h3 data-pt="Novos Serviços: Segurança Proativa" data-en="New Services: Proactive Security">Novos Serviços: Segurança Proativa</h3>
-                <p data-pt="Cruzamento de câmeras, sensores e padrões históricos para detectar ameaças antes que se tornem incidentes." data-en="Cross-referencing cameras, sensors, and historical patterns to detect threats before they become incidents.">Cruzamento de câmeras, sensores e padrões históricos para detectar ameaças antes que se tornem incidentes.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                </div>
-                <h3 data-pt="Para sua Empresa" data-en="For Your Company">Para sua Empresa</h3>
-                <p data-pt="Mais eficiência, mais receita por cliente e diferenciação real frente à concorrência." data-en="More efficiency, higher revenue per client, and real differentiation against the competition.">Mais eficiência, mais receita por cliente e diferenciação real frente à concorrência.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-                </div>
-                <h3 data-pt="Para seu Cliente" data-en="For Your Client">Para seu Cliente</h3>
-                <p data-pt="Resposta mais rápida, investigação inteligente, acesso seguro. Um nível de serviço que antes era impossível em escala." data-en="Faster response, intelligent investigation, secure access. A service level that was previously impossible at scale.">Resposta mais rápida, investigação inteligente, acesso seguro. Um nível de serviço que antes era impossível em escala.</p>
-            </div>
-        </div>
+<!-- ═══ PROBLEMA ═══ -->
+<section class="section" id="problema">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="kicker" data-pt="O Problema" data-en="The Problem">O Problema</span>
+      <h2 class="section-title"><span data-pt="Centrais de monitoramento ainda operam como " data-en="Monitoring centers still operate like ">Centrais de monitoramento ainda operam como </span><em data-pt="há 20 anos." data-en="20 years ago.">há 20 anos.</em></h2>
+      <p class="section-sub" data-pt="O setor cresceu e o problema mudou de escala — mas a arquitetura de operação não mudou junto. Não é problema de pessoas. É problema de arquitetura." data-en="The industry grew and the problem changed scale — but the operating architecture didn't keep up. It's not a people problem. It's an architecture problem.">O setor cresceu e o problema mudou de escala — mas a arquitetura de operação não mudou junto. Não é problema de pessoas. É problema de arquitetura.</p>
     </div>
+    <div class="problem-list reveal stagger">
+      <div class="problem-row"><span class="idx">01</span><span class="txt" data-pt="A maioria dos alarmes é falsa" data-en="Most alarms are false">A maioria dos alarmes é falsa</span><span class="tag" data-pt="Ruído" data-en="Noise">Ruído</span></div>
+      <div class="problem-row"><span class="idx">02</span><span class="txt" data-pt="Operadores sobrecarregados em paralelo" data-en="Operators overloaded in parallel">Operadores sobrecarregados em paralelo</span><span class="tag" data-pt="Capacidade" data-en="Capacity">Capacidade</span></div>
+      <div class="problem-row"><span class="idx">03</span><span class="txt" data-pt="Resposta na casa dos minutos" data-en="Response in the order of minutes">Resposta na casa dos minutos</span><span class="tag" data-pt="Latência" data-en="Latency">Latência</span></div>
+      <div class="problem-row"><span class="idx">04</span><span class="txt" data-pt="Custo operacional crescente" data-en="Rising operational cost">Custo operacional crescente</span><span class="tag" data-pt="Escala" data-en="Scale">Escala</span></div>
+    </div>
+    <div class="problem-turn reveal">
+      <span data-pt="A " data-en="">A </span><em data-pt="IA" data-en="AI">IA</em><span data-pt=" já opera grande parte dessas ocorrências autonomamente. Não como assistente — como operador autônomo." data-en=" already operates most of these events autonomously. Not as an assistant — as an autonomous operator."> já opera grande parte dessas ocorrências autonomamente. Não como assistente — como operador autônomo.</span>
+    </div>
+  </div>
 </section>
 
-<!-- ─── CHALLENGES ─── -->
-<section class="features fade-in" id="challenges">
-    <div class="container">
-        <div class="features-header">
-            <div class="section-label" data-pt="Por que agora" data-en="Why now">Por que agora</div>
-            <h2 class="section-title" data-pt="Segurança está prestes a mudar para sempre" data-en="Security is about to change forever">Segurança está prestes a mudar para sempre</h2>
-            <p class="section-subtitle" data-pt="IA generativa vai transformar segurança nos próximos anos. Quem se mover primeiro, sai na frente." data-en="Generative AI will transform security in the coming years. Those who move first, get ahead.">IA generativa vai transformar segurança nos próximos anos. Quem se mover primeiro, sai na frente.</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                </div>
-                <h3 data-pt="Alarmes Falsos Dominam a Operação" data-en="False Alarms Dominate Operations">Alarmes Falsos Dominam a Operação</h3>
-                <p data-pt="A maioria absoluta das ocorrências são alarmes falsos. Operadores gastam atenção em eventos sem risco real — e o nível de serviço cai." data-en="The vast majority of events are false alarms. Operators spend attention on events with no real risk — and service levels drop.">A maioria absoluta das ocorrências são alarmes falsos. Operadores gastam atenção em eventos sem risco real — e o nível de serviço cai.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                </div>
-                <h3 data-pt="Dificuldade de Escalar" data-en="Difficulty Scaling">Dificuldade de Escalar</h3>
-                <p data-pt="Nos picos, a central não aguenta. Escalar depende de mais gente — e gente é lento, caro e escasso." data-en="During peaks, the center can't keep up. Scaling depends on more people — and people are slow, expensive, and scarce.">Nos picos, a central não aguenta. Escalar depende de mais gente — e gente é lento, caro e escasso.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                </div>
-                <h3 data-pt="Pressão Competitiva Global" data-en="Global Competitive Pressure">Pressão Competitiva Global</h3>
-                <p data-pt="Players internacionais estão investindo pesado em IA. A janela de oportunidade para quem se move rápido está aberta — mas não por muito tempo." data-en="International players are investing heavily in AI. The window for those who move fast is open — but not for long.">Players internacionais estão investindo pesado em IA. A janela de oportunidade para quem se move rápido está aberta — mas não por muito tempo.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></svg>
-                </div>
-                <h3 data-pt="Tecnologia Pronta para Produção" data-en="Production-Ready Technology">Tecnologia Pronta para Produção</h3>
-                <p data-pt="Modelos de IA finalmente atingiram o nível necessário para operar 24/7 em produção. O que era promessa virou ferramenta — dá para colocar no ar agora." data-en="AI models have finally reached the level needed to run 24/7 in production. What was once a promise is now a tool — and it can be deployed today.">Modelos de IA finalmente atingiram o nível necessário para operar 24/7 em produção. O que era promessa virou ferramenta — dá para colocar no ar agora.</p>
-            </div>
-        </div>
+<!-- ═══ COMO FUNCIONA ═══ -->
+<section class="section" id="como-funciona" style="border-top:1px solid var(--rule);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="kicker" data-pt="Como Funciona" data-en="How It Works">Como Funciona</span>
+      <h2 class="section-title"><span data-pt="Um " data-en="One ">Um </span><em>SuperAgente</em><span data-pt=" opera uma ocorrência inteira." data-en=" operates an entire event."> opera uma ocorrência inteira.</span></h2>
+      <p class="section-sub" data-pt="Da chegada do alarme à decisão final. Em segundos, em produção real — sem operador humano no loop por padrão, com handover claro quando o caso pede." data-en="From alarm to final decision. In seconds, in real production — no human in the loop by default, with a clear handover when the case calls for it.">Da chegada do alarme à decisão final. Em segundos, em produção real — sem operador humano no loop por padrão, com handover claro quando o caso pede.</p>
     </div>
+    <div class="flow-grid reveal stagger">
+      <div class="flow-step"><span class="num">01</span><div><h3 data-pt="Recebe a ocorrência" data-en="Receives the event">Recebe a ocorrência</h3><p data-pt="Alarmes, sensores, câmeras e o software do cliente entram na fila do agente." data-en="Alarms, sensors, cameras and the client's software enter the agent's queue.">Alarmes, sensores, câmeras e o software do cliente entram na fila do agente.</p></div></div>
+      <div class="flow-step"><span class="num">02</span><div><h3 data-pt="Analisa câmeras e sensores" data-en="Analyzes cameras and sensors">Analisa câmeras e sensores</h3><p data-pt="Lê as imagens, classifica o evento e separa ruído do que precisa de resposta." data-en="Reads the footage, classifies the event and separates noise from what needs a response.">Lê as imagens, classifica o evento e separa ruído do que precisa de resposta.</p></div></div>
+      <div class="flow-step"><span class="num">03</span><div><h3 data-pt="Liga para o cliente" data-en="Calls the client">Liga para o cliente</h3><p data-pt="Voz natural em português, por telefone ou WhatsApp. Confirma e valida o evento." data-en="Natural voice in Portuguese, by phone or WhatsApp. Confirms and validates the event.">Voz natural em português, por telefone ou WhatsApp. Confirma e valida o evento.</p></div></div>
+      <div class="flow-step"><span class="num">04</span><div><h3 data-pt="Toma a decisão" data-en="Makes the decision">Toma a decisão</h3><p data-pt="Falso positivo encerra, evento confirmado aciona, caso ambíguo escala. Regra do cliente, velocidade da máquina." data-en="False positive closes, confirmed event triggers, ambiguous case escalates. Client's rules, machine speed.">Falso positivo encerra, evento confirmado aciona, caso ambíguo escala. Regra do cliente, velocidade da máquina.</p></div></div>
+      <div class="flow-step"><span class="num">05</span><div><h3 data-pt="Executa as ações" data-en="Executes the actions">Executa as ações</h3><p data-pt="Aciona equipe, registra na plataforma e dispara protocolos integrados. Tudo auditável." data-en="Dispatches the team, logs to the platform and fires integrated protocols. Fully auditable.">Aciona equipe, registra na plataforma e dispara protocolos integrados. Tudo auditável.</p></div></div>
+      <div class="flow-step"><span class="num">06</span><div><h3 data-pt="Escala para o humano quando precisa" data-en="Escalates to a human when needed">Escala para o humano quando precisa</h3><p data-pt="O caso entra no operador já resumido, com contexto e decisão sugerida." data-en="The case reaches the operator already summarized, with context and a suggested decision.">O caso entra no operador já resumido, com contexto e decisão sugerida.</p></div></div>
+    </div>
+  </div>
 </section>
 
-<!-- ─── BEFORE / AFTER ─── -->
-<section class="before-after fade-in">
-    <div class="container">
-        <div class="before-after-header">
-            <div class="section-label" data-pt="Comparativo" data-en="Comparison">Comparativo</div>
-            <h2 class="section-title" data-pt="O que muda com a Auria" data-en="What changes with Auria">O que muda com a Auria</h2>
-            <p class="section-subtitle" data-pt="Operar no limite versus operar com inteligência." data-en="Operating at the limit versus operating with intelligence.">Operar no limite versus operar com inteligência.</p>
-        </div>
-        <div class="ba-grid">
-            <div class="ba-column before">
-                <div class="ba-column-label" data-pt="Sua central hoje" data-en="Your center today">Sua central hoje</div>
-                <div class="ba-items">
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                        <span data-pt="Alarmes falsos sobrecarregam operadores e geram fadiga" data-en="False alarms overwhelm operators and cause fatigue">Alarmes falsos sobrecarregam operadores e geram fadiga</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                        <span data-pt="Horários de pico sem cobertura suficiente" data-en="Peak hours without enough coverage">Horários de pico sem cobertura suficiente</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                        <span data-pt="Qualidade do serviço varia conforme o operador e o turno" data-en="Service quality varies by operator and shift">Qualidade do serviço varia conforme o operador e o turno</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                        <span data-pt="Serviço reativo — só age depois que algo acontece" data-en="Reactive service — only acts after something happens">Serviço reativo — só age depois que algo acontece</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ba-column after">
-                <div class="ba-column-label" data-pt="Sua central com a Auria" data-en="Your center with Auria">Sua central com a Auria</div>
-                <div class="ba-items">
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                        <span data-pt="Operadores virtuais absorvem o volume — humanos focam no que importa" data-en="Virtual operators absorb the volume — humans focus on what matters">Operadores virtuais absorvem o volume — humanos focam no que importa</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                        <span data-pt="Cobertura consistente 24h, independente de escala humana" data-en="Consistent 24h coverage, independent of human staffing">Cobertura consistente 24h, independente de escala humana</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                        <span data-pt="Padrão de atendimento consistente, independente de turno ou volume" data-en="Consistent service standard, regardless of shift or volume">Padrão de atendimento consistente, independente de turno ou volume</span>
-                    </div>
-                    <div class="ba-item">
-                        <div class="ba-item-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-                        <span data-pt="Detecção proativa cruzando câmeras, sensores e padrões" data-en="Proactive detection crossing cameras, sensors, and patterns">Detecção proativa cruzando câmeras, sensores e padrões</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- ═══ HUMANO NO LOOP ═══ -->
+<section class="section" id="humano">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="kicker" data-pt="Humano no Loop" data-en="Human in the Loop">Humano no Loop</span>
+      <h2 class="section-title" data-pt="A IA não substitui o humano. Reposiciona." data-en="AI doesn't replace the human. It repositions.">A IA não substitui o humano. Reposiciona.</h2>
+      <p class="section-sub" data-pt="O SuperAgente assume o volume e a velocidade. O operador humano fica com o julgamento, a autoridade e o que é insubstituível." data-en="The SuperAgent takes volume and speed. The human operator keeps judgment, authority and what's irreplaceable.">O SuperAgente assume o volume e a velocidade. O operador humano fica com o julgamento, a autoridade e o que é insubstituível.</p>
     </div>
+    <div class="hitl-grid reveal">
+      <div class="hitl-col ai">
+        <div class="hitl-col__head">
+          <div class="hitl-col__icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><div class="hitl-col__title" data-pt="SuperAgente" data-en="SuperAgent">SuperAgente</div><div class="hitl-col__sub" data-pt="Velocidade · Escala · Consistência" data-en="Speed · Scale · Consistency">Velocidade · Escala · Consistência</div></div>
+        </div>
+        <ul class="hitl-items">
+          <li data-pt="Monitoramento 24/7 sem fadiga" data-en="24/7 monitoring without fatigue">Monitoramento 24/7 sem fadiga</li>
+          <li data-pt="Triagem de alarmes em tempo real" data-en="Real-time alarm triage">Triagem de alarmes em tempo real</li>
+          <li data-pt="Cruzamento de câmeras, sensores e contexto" data-en="Cross-referencing cameras, sensors and context">Cruzamento de câmeras, sensores e contexto</li>
+          <li data-pt="Ligações e resposta autônoma a ocorrências" data-en="Calls and autonomous incident response">Ligações e resposta autônoma a ocorrências</li>
+        </ul>
+      </div>
+      <div class="hitl-bridge">
+        <div class="hitl-bridge__line"></div>
+        <div class="hitl-bridge__label" data-pt="Escala quando necessário" data-en="Escalates when needed">Escala quando necessário</div>
+        <div class="hitl-bridge__line"></div>
+      </div>
+      <div class="hitl-col human">
+        <div class="hitl-col__head">
+          <div class="hitl-col__icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div><div class="hitl-col__title" data-pt="Operador Humano" data-en="Human Operator">Operador Humano</div><div class="hitl-col__sub" data-pt="Julgamento · Empatia · Autoridade" data-en="Judgment · Empathy · Authority">Julgamento · Empatia · Autoridade</div></div>
+        </div>
+        <ul class="hitl-items">
+          <li data-pt="Análise de segundo nível em risco real" data-en="Second-level analysis on real risk">Análise de segundo nível em risco real</li>
+          <li data-pt="Acionamento de polícia e autoridades" data-en="Contacting police and authorities">Acionamento de polícia e autoridades</li>
+          <li data-pt="Decisões que exigem julgamento" data-en="Decisions that require judgment">Decisões que exigem julgamento</li>
+          <li data-pt="Supervisão estratégica da operação" data-en="Strategic oversight of the operation">Supervisão estratégica da operação</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ─── HOW IT WORKS ─── -->
-<section class="how-it-works fade-in" id="how-it-works">
-    <div class="container">
-        <div class="how-it-works-header" style="text-align:center">
-            <div class="section-label" data-pt="Próximos Passos" data-en="Next Steps">Próximos Passos</div>
-            <h2 class="section-title" data-pt="Da validação à operação em semanas" data-en="From validation to operation in weeks">Da validação à operação em semanas</h2>
-            <p class="section-subtitle" style="margin:0 auto" data-pt="Rápido e de baixo risco. Validamos em produção e implementamos." data-en="Fast and low-risk. We validate in production and deploy.">Rápido e de baixo risco. Validamos em produção e implementamos.</p>
-        </div>
-        <div class="steps-container" style="margin-top:48px">
-            <div class="step-card">
-                <div class="step-number">
-                    <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-                </div>
-                <h3 data-pt="POC" data-en="POC">POC</h3>
-            </div>
-            <div class="step-card">
-                <div class="step-number">
-                    <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                </div>
-                <h3 data-pt="Deploy" data-en="Deploy">Deploy</h3>
-            </div>
-        </div>
+<!-- ═══ APLICAÇÕES ═══ -->
+<section class="section" id="aplicacoes" style="border-top:1px solid var(--rule);">
+  <div class="container">
+    <div class="section-head center reveal">
+      <span class="kicker" data-pt="Aplicações" data-en="Applications">Aplicações</span>
+      <h2 class="section-title" data-pt="IA aplicada aos serviços que sua central já oferece" data-en="AI applied to the services your center already offers">IA aplicada aos serviços que sua central já oferece</h2>
     </div>
+    <div class="apps-grid reveal stagger">
+      <div class="app">
+        <div class="app__icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3 data-pt="Alarmes" data-en="Alarms">Alarmes</h3>
+        <p data-pt="Triagem autônoma, menos falsos positivos, protocolos acionados na hora." data-en="Autonomous triage, fewer false positives, protocols triggered instantly.">Triagem autônoma, menos falsos positivos, protocolos acionados na hora.</p>
+      </div>
+      <div class="app">
+        <div class="app__icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h6"/></svg></div>
+        <h3 data-pt="Portaria Remota" data-en="Remote Doorman">Portaria Remota</h3>
+        <p data-pt="Atendimento autônomo, verificação de identidade e liberação inteligente." data-en="Autonomous service, identity verification and intelligent clearance.">Atendimento autônomo, verificação de identidade e liberação inteligente.</p>
+      </div>
+      <div class="app">
+        <div class="app__icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h3 data-pt="Monitoramento de Câmeras" data-en="Camera Monitoring">Monitoramento de Câmeras</h3>
+        <p data-pt="Vigilância contínua com visão computacional, contexto operacional e histórico." data-en="Continuous surveillance with computer vision, operational context and history.">Vigilância contínua com visão computacional, contexto operacional e histórico.</p>
+      </div>
+      <div class="app">
+        <div class="app__icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <h3 data-pt="Controle de Acesso" data-en="Access Control">Controle de Acesso</h3>
+        <p data-pt="Gestão inteligente de permissões, detecção de anomalias, integração nativa." data-en="Intelligent permission management, anomaly detection, native integration.">Gestão inteligente de permissões, detecção de anomalias, integração nativa.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ─── HUMAN IN THE LOOP ─── -->
-<section class="hitl fade-in">
-    <div class="container">
-        <div class="hitl-header">
-            <div class="section-label" data-pt="Humano no Loop" data-en="Human in the Loop">Humano no Loop</div>
-            <h2 class="section-title" data-pt="IA e humanos, cada um no seu melhor" data-en="AI and humans, each at their best">IA e humanos, cada um no seu melhor</h2>
-            <p class="section-subtitle" data-pt="A Auria não elimina o humano. Reposiciona. IA no volume e na velocidade. Humanos no julgamento e na decisão." data-en="Auria doesn't eliminate the human. It repositions. AI on volume and speed. Humans on judgment and decisions.">A Auria não elimina o humano. Reposiciona. IA no volume e na velocidade. Humanos no julgamento e na decisão.</p>
-        </div>
-        <div class="hitl-diagram">
-            <!-- AI Column -->
-            <div class="hitl-column">
-                <div class="hitl-column-header">
-                    <div class="hitl-column-icon ai">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    </div>
-                    <div>
-                        <div class="hitl-column-title" data-pt="Operador Virtual" data-en="Virtual Operator">Operador Virtual</div>
-                        <div class="hitl-column-subtitle" data-pt="Velocidade, escala, consistência" data-en="Speed, scale, consistency">Velocidade, escala, consistência</div>
-                    </div>
-                </div>
-                <ul class="hitl-items">
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot ai"></div>
-                        <span data-pt="Monitoramento 24/7 sem fadiga" data-en="24/7 monitoring without fatigue">Monitoramento 24/7 sem fadiga</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot ai"></div>
-                        <span data-pt="Triagem de alarmes em tempo real" data-en="Real-time alarm triage">Triagem de alarmes em tempo real</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot ai"></div>
-                        <span data-pt="Cruzamento de câmeras, sensores e contexto" data-en="Cross-referencing cameras, sensors, and context">Cruzamento de câmeras, sensores e contexto</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot ai"></div>
-                        <span data-pt="Resposta autônoma a ocorrências" data-en="Autonomous incident response">Resposta autônoma a ocorrências</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot ai"></div>
-                        <span data-pt="Detecção proativa de ameaças" data-en="Proactive threat detection">Detecção proativa de ameaças</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Bridge -->
-            <div class="hitl-bridge">
-                <div class="hitl-bridge-line"></div>
-                <div class="hitl-bridge-arrow"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 17l9.2-5L7 7"/></svg></div>
-                <div class="hitl-bridge-label" data-pt="Escalona quando necessário" data-en="Escalates when needed">Escalona quando necessário</div>
-                <div class="hitl-bridge-arrow"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M7 17l9.2-5L7 7"/></svg></div>
-                <div class="hitl-bridge-line"></div>
-            </div>
-
-            <!-- Human Column -->
-            <div class="hitl-column">
-                <div class="hitl-column-header">
-                    <div class="hitl-column-icon human">
-                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                    </div>
-                    <div>
-                        <div class="hitl-column-title" data-pt="Operador Humano" data-en="Human Operator">Operador Humano</div>
-                        <div class="hitl-column-subtitle" data-pt="Julgamento, empatia, autoridade" data-en="Judgment, empathy, authority">Julgamento, empatia, autoridade</div>
-                    </div>
-                </div>
-                <ul class="hitl-items">
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot human"></div>
-                        <span data-pt="Análise de segundo nível em risco real" data-en="Second-level analysis on real risk">Análise de segundo nível em risco real</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot human"></div>
-                        <span data-pt="Acionamento de polícia e autoridades" data-en="Contacting police and authorities">Acionamento de polícia e autoridades</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot human"></div>
-                        <span data-pt="Decisões que exigem julgamento" data-en="Decisions that require judgment">Decisões que exigem julgamento</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot human"></div>
-                        <span data-pt="Comunicação empática em situações sensíveis" data-en="Empathetic communication in sensitive situations">Comunicação empática em situações sensíveis</span>
-                    </li>
-                    <li class="hitl-item">
-                        <div class="hitl-item-dot human"></div>
-                        <span data-pt="Supervisão estratégica da operação" data-en="Strategic oversight of operations">Supervisão estratégica da operação</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+<!-- ═══ CTA ═══ -->
+<section class="section cta-band" id="contato">
+  <div class="container">
+    <div class="cta-box reveal">
+      <span class="kicker" style="justify-content:center" data-pt="Próximo Passo" data-en="Next Step">Próximo Passo</span>
+      <h2 class="section-title" data-pt="Coloque um SuperAgente para operar na sua central" data-en="Put a SuperAgent to work in your center">Coloque um SuperAgente para operar na sua central</h2>
+      <p class="section-sub" data-pt="Queremos entender sua operação. O primeiro passo é uma conversa — sem compromisso." data-en="We want to understand your operation. The first step is a conversation — no strings attached.">Queremos entender sua operação. O primeiro passo é uma conversa — sem compromisso.</p>
+      <a href="https://forms.gle/u426TS8BnVAsYpKJ6" target="_blank" rel="noopener" class="btn btn-primary" data-pt="Entre em contato" data-en="Get in touch">Entre em contato <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
+  </div>
 </section>
 
-<!-- ─── USE CASES ─── -->
-<section class="use-cases fade-in" id="use-cases">
-    <div class="container">
-        <div class="use-cases-header">
-            <div class="section-label" data-pt="Aplicações" data-en="Applications">Aplicações</div>
-            <h2 class="section-title" data-pt="Quem atendemos" data-en="Who we serve">Quem atendemos</h2>
-            <p class="section-subtitle" data-pt="IA aplicada aos serviços que sua central já oferece." data-en="AI applied to the services your center already provides.">IA aplicada aos serviços que sua central já oferece.</p>
-        </div>
-        <div class="uc-grid">
-            <div class="uc-card">
-                <div class="uc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <h3 data-pt="Alarmes" data-en="Alarms">Alarmes</h3>
-                <p data-pt="Triagem autônoma, menos falsos positivos, protocolos acionados na hora." data-en="Autonomous triage, fewer false positives, protocols triggered instantly.">Triagem autônoma, menos falsos positivos, protocolos acionados na hora.</p>
-            </div>
-            <div class="uc-card">
-                <div class="uc-icon">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/><path d="M3 9h6"/></svg>
-                </div>
-                <h3 data-pt="Portaria Remota" data-en="Remote Doorman">Portaria Remota</h3>
-                <p data-pt="Atendimento autônomo, verificação de identidade e liberação inteligente." data-en="Autonomous service, identity verification, and intelligent clearance.">Atendimento autônomo, verificação de identidade e liberação inteligente.</p>
-            </div>
-            <div class="uc-card">
-                <div class="uc-icon">
-                    <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                </div>
-                <h3 data-pt="Monitoramento de Câmeras" data-en="Camera Monitoring">Monitoramento de Câmeras</h3>
-                <p data-pt="Vigilância contínua com visão computacional, contexto operacional e histórico." data-en="Continuous surveillance with computer vision, operational context, and history.">Vigilância contínua com visão computacional, contexto operacional e histórico.</p>
-            </div>
-            <div class="uc-card">
-                <div class="uc-icon">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                </div>
-                <h3 data-pt="Controle de Acesso" data-en="Access Control">Controle de Acesso</h3>
-                <p data-pt="Gestão inteligente de permissões, detecção de anomalias, integração nativa." data-en="Intelligent permission management, anomaly detection, native integration.">Gestão inteligente de permissões, detecção de anomalias, integração nativa.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ─── HOW AURIA WORKS INSIDE YOUR CENTER ─── -->
-<section class="product fade-in" id="product">
-    <div class="container">
-        <div class="product-wrapper">
-            <div class="product-grid">
-                <div>
-                    <div class="section-label" data-pt="Por Dentro" data-en="Under the Hood">Por Dentro</div>
-                    <h2 class="section-title" data-pt="Entende contexto. Interpreta sinais. Age de forma autônoma." data-en="Understands context. Interprets signals. Acts autonomously.">Entende contexto. Interpreta sinais. Age de forma autônoma.</h2>
-                    <p class="section-subtitle" data-pt="Integra com seus sistemas existentes — alarmes, VMS, portaria remota — e opera como um operador. Só que sem pausas, sem distrações, cruzando sinais em tempo real." data-en="Integrates with your existing systems — alarms, VMS, remote doorman — and operates like an operator. Just without breaks, without distractions, cross-referencing signals in real time.">Integra com seus sistemas existentes — alarmes, VMS, portaria remota — e opera como um operador. Só que sem pausas, sem distrações, cruzando sinais em tempo real.</p>
-                    <div class="product-features">
-                        <div class="product-feature">
-                            <div class="product-feature-icon">
-                                <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            </div>
-                            <div>
-                                <h4 data-pt="Integração com seus Sistemas" data-en="Integration with your Systems">Integração com seus Sistemas</h4>
-                                <p data-pt="Funciona com o que você já tem — câmeras, sensores, PABX SIP, software de gestão. Sem trocar nada." data-en="Works with what you already have — cameras, sensors, SIP PBX, management software. No replacements.">Funciona com o que você já tem — câmeras, sensores, PABX SIP, software de gestão. Sem trocar nada.</p>
-                            </div>
-                        </div>
-                        <div class="product-feature">
-                            <div class="product-feature-icon">
-                                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-                            </div>
-                            <div>
-                                <h4 data-pt="Humano no Loop" data-en="Human in the Loop">Humano no Loop</h4>
-                                <p data-pt="IA no repetitivo. Humanos na segunda análise e no acionamento de autoridades. Cada um no seu melhor." data-en="AI on the repetitive. Humans on second-level analysis and contacting authorities. Each at their best.">IA no repetitivo. Humanos na segunda análise e no acionamento de autoridades. Cada um no seu melhor.</p>
-                            </div>
-                        </div>
-                        <div class="product-feature">
-                            <div class="product-feature-icon">
-                                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                            </div>
-                            <div>
-                                <h4 data-pt="Contexto Local Inteligente" data-en="Intelligent Local Context">Contexto Local Inteligente</h4>
-                                <p data-pt="Câmeras, sensores, políticas e padrões alimentam a IA. Cada local é entendido de forma única." data-en="Cameras, sensors, policies, and patterns feed the AI. Each site is uniquely understood.">Câmeras, sensores, políticas e padrões alimentam a IA. Cada local é entendido de forma única.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-visual">
-                    <div class="product-metric-card">
-                        <div>
-                            <div class="pmc-label" data-pt="Entrada" data-en="Input">Entrada</div>
-                            <div class="pmc-value" data-pt="Câmeras, Sensores, Alarmes" data-en="Cameras, Sensors, Alarms">Câmeras, Sensores, Alarmes</div>
-                        </div>
-                        <span class="pmc-badge cyan" data-pt="Multi-Sinal" data-en="Multi-Signal">Multi-Sinal</span>
-                    </div>
-                    <div class="product-metric-card">
-                        <div>
-                            <div class="pmc-label" data-pt="Processamento" data-en="Processing">Processamento</div>
-                            <div class="pmc-value" data-pt="Contexto + Políticas + Histórico" data-en="Context + Policies + History">Contexto + Políticas + Histórico</div>
-                        </div>
-                        <span class="pmc-badge purple" data-pt="Interpretação Inteligente" data-en="Intelligent Interpretation">Interpretação Inteligente</span>
-                    </div>
-                    <div class="product-metric-card">
-                        <div>
-                            <div class="pmc-label" data-pt="Ação" data-en="Action">Ação</div>
-                            <div class="pmc-value" data-pt="Coordenação Autônoma" data-en="Autonomous Coordination">Coordenação Autônoma</div>
-                        </div>
-                        <span class="pmc-badge green" data-pt="Escalonamento Humano" data-en="Human Escalation">Escalonamento Humano</span>
-                    </div>
-                    <div class="product-metric-card">
-                        <div>
-                            <div class="pmc-label" data-pt="Resultado" data-en="Result">Resultado</div>
-                            <div class="pmc-value" data-pt="Mais Eficiência, Mais Receita" data-en="More Efficiency, More Revenue">Mais Eficiência, Mais Receita</div>
-                        </div>
-                        <span class="pmc-badge green" data-pt="Diferenciação Real" data-en="Real Differentiation">Diferenciação Real</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ─── ARTICLES ─── -->
-<section class="articles fade-in" id="articles">
-    <div class="container">
-        <div class="articles-header">
-            <div>
-                <div class="section-label" data-pt="Artigos" data-en="Articles">Artigos</div>
-                <h2 class="section-title" data-pt="Últimos Insights" data-en="Latest Insights">Últimos Insights</h2>
-            </div>
-        </div>
-        <div class="articles-grid">
-            <a href="ia-na-seguranca-residencial.html" class="article-card">
-                <div class="article-thumb">
-                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                </div>
-                <div class="article-body">
-                    <div class="article-tag" data-pt="Segurança Residencial" data-en="Home Security">Segurança Residencial</div>
-                    <h3 data-pt="Como a IA está redefinindo a segurança residencial" data-en="How AI is redefining home security">Como a IA está redefinindo a segurança residencial</h3>
-                    <p data-pt="Como agentes autônomos e monitoramento multi-sinal estão transformando a proteção residencial." data-en="How autonomous agents and multi-signal monitoring are transforming home protection.">Como agentes autônomos e monitoramento multi-sinal estão transformando a proteção residencial.</p>
-                    <span class="article-read-more" data-pt="Ler mais →" data-en="Read more →">Ler mais →</span>
-                </div>
-            </a>
-            <a href="sistemas-autonomos-na-seguranca.html" class="article-card">
-                <div class="article-thumb">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                </div>
-                <div class="article-body">
-                    <div class="article-tag" data-pt="Automação" data-en="Automation">Automação</div>
-                    <h3 data-pt="O que sistemas autônomos fazem melhor que humanos" data-en="What autonomous systems do better than humans">O que sistemas autônomos fazem melhor que humanos</h3>
-                    <p data-pt="Consistência, velocidade e precisão: por que IA supera o monitoramento humano." data-en="Consistency, speed, and accuracy: why AI outperforms human monitoring.">Consistência, velocidade e precisão: por que IA supera o monitoramento humano.</p>
-                    <span class="article-read-more" data-pt="Ler mais →" data-en="Read more →">Ler mais →</span>
-                </div>
-            </a>
-            <a href="visao-computacional-auria.html" class="article-card">
-                <div class="article-thumb">
-                    <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </div>
-                <div class="article-body">
-                    <div class="article-tag" data-pt="Percepção Inteligente" data-en="Intelligent Perception">Percepção Inteligente</div>
-                    <h3 data-pt="Câmeras que realmente enxergam: percepção inteligente aplicada à segurança" data-en="Cameras that truly see: intelligent perception applied to security">Câmeras que realmente enxergam: percepção inteligente aplicada à segurança</h3>
-                    <p data-pt="Quando infraestrutura comum vira uma rede de percepção que interpreta contexto e detecta ameaças." data-en="When ordinary infrastructure becomes a perception network that interprets context and detects threats.">Quando infraestrutura comum vira uma rede de percepção que interpreta contexto e detecta ameaças.</p>
-                    <span class="article-read-more" data-pt="Ler mais →" data-en="Read more →">Ler mais →</span>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- ─── CTA ─── -->
-<section class="cta fade-in" id="cta">
-    <div class="container">
-        <div class="cta-box">
-            <div class="section-label" style="justify-content:center" data-pt="Próximo Passo" data-en="Next Step">Próximo Passo</div>
-            <h2 class="section-title" style="text-align:center" data-pt="O futuro da segurança está sendo construído agora" data-en="The future of security is being built right now">O futuro da segurança está sendo construído agora</h2>
-            <p class="section-subtitle" data-pt="Queremos entender sua operação. O primeiro passo é uma conversa — sem compromisso." data-en="We want to understand your operation. The first step is a conversation — no strings attached.">Queremos entender sua operação. O primeiro passo é uma conversa — sem compromisso.</p>
-            <a href="https://forms.gle/u426TS8BnVAsYpKJ6" target="_blank" class="btn-primary" data-pt="Fale com a Auria" data-en="Talk to Auria">Fale com a Auria <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-        </div>
-    </div>
-</section>
-
-<!-- ─── FOOTER ─── -->
+<!-- ═══ FOOTER ═══ -->
 <footer class="footer">
-    <div class="container">
-        <div class="footer-top">
-            <div class="footer-brand">
-                <a href="#" class="nav-logo">
-                    <div class="logo-icon" aria-label="Auria AI"></div>
-                    AURIA AI
-                </a>
-                <p data-pt="IA autônoma redefinindo segurança." data-en="Autonomous AI redefining security.">IA autônoma redefinindo segurança.</p>
-            </div>
-            <div class="footer-col">
-                <h4 data-pt="Plataforma" data-en="Platform">Plataforma</h4>
-                <a href="#solution" data-pt="Operadores Virtuais" data-en="Virtual Operators">Operadores Virtuais</a>
-                <a href="#product" data-pt="Como Opera" data-en="How It Operates">Como Opera</a>
-                <a href="#how-it-works" data-pt="Próximos Passos" data-en="Next Steps">Próximos Passos</a>
-            </div>
-            <div class="footer-col">
-                <h4 data-pt="Empresa" data-en="Company">Empresa</h4>
-                <a href="#solution" data-pt="O que Fazemos" data-en="What We Do">O que Fazemos</a>
-                <a href="#articles" data-pt="Artigos" data-en="Articles">Artigos</a>
-                <a href="#cta" data-pt="Contato" data-en="Contact">Contato</a>
-            </div>
-            <div class="footer-col">
-                <h4 data-pt="Contato" data-en="Contact">Contato</h4>
-                <a href="mailto:luis@auria-ai.com.br">luis@auria-ai.com.br</a>
-                <a href="mailto:andres@auria-ai.com.br">andres@auria-ai.com.br</a>
-                <a data-pt="Av. Paulista, 1636 - São Paulo" data-en="Av. Paulista, 1636 - São Paulo">Av. Paulista, 1636 - São Paulo</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>&copy; 2026 Auria AI LTDA. <span data-pt="Todos os direitos reservados." data-en="All rights reserved.">Todos os direitos reservados.</span></span>
-            <div class="footer-social">
-                <a href="https://br.linkedin.com/company/auria-ai" target="_blank" aria-label="LinkedIn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </a>
-            </div>
-        </div>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="logo"><span class="logo__mark"><i></i></span>Auria<span class="logo__sub">AI</span></a>
+        <p data-pt="SuperAgentes de IA para centrais de monitoramento. Recebem ocorrências, analisam, decidem e agem — em tempo real." data-en="AI SuperAgents for monitoring centers. They receive events, analyze, decide and act — in real time.">SuperAgentes de IA para centrais de monitoramento. Recebem ocorrências, analisam, decidem e agem — em tempo real.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-pt="Navegação" data-en="Navigation">Navegação</h4>
+        <a href="#problema" data-pt="O Problema" data-en="The Problem">O Problema</a>
+        <a href="#como-funciona" data-pt="Como Funciona" data-en="How It Works">Como Funciona</a>
+        <a href="#aplicacoes" data-pt="Aplicações" data-en="Applications">Aplicações</a>
+      </div>
+      <div class="footer-col">
+        <h4 data-pt="Contato" data-en="Contact">Contato</h4>
+        <a href="mailto:comercial@auria-ai.com.br">comercial@auria-ai.com.br</a>
+        <a data-pt="Av. Paulista, 1636 · São Paulo" data-en="Av. Paulista, 1636 · São Paulo">Av. Paulista, 1636 · São Paulo</a>
+      </div>
     </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Auria AI LTDA. <span data-pt="Todos os direitos reservados." data-en="All rights reserved.">Todos os direitos reservados.</span></span>
+      <div class="footer-social">
+        <a href="https://br.linkedin.com/company/auria-ai" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      </div>
+    </div>
+  </div>
 </footer>
 
 <script>
-// ─── LANGUAGE TOGGLE ───
-let currentLang = 'pt';
-
-function setLang(lang) {
-    currentLang = lang;
-    document.getElementById('langPt').classList.toggle('active', lang === 'pt');
-    document.getElementById('langEn').classList.toggle('active', lang === 'en');
-    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-
-    document.querySelectorAll('[data-pt][data-en]').forEach(el => {
-        const text = el.getAttribute(`data-${lang}`);
-        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-            el.placeholder = text;
-        } else {
-            el.textContent = text;
-        }
-    });
-
-    // Restore SVG arrows inside buttons that got wiped
-    document.querySelectorAll('.btn-primary, .nav-cta').forEach(btn => {
-        if (!btn.querySelector('svg')) {
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('width', '16');
-            svg.setAttribute('height', '16');
-            svg.setAttribute('viewBox', '0 0 24 24');
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('stroke-width', '2');
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', 'M5 12h14M12 5l7 7-7 7');
-            svg.appendChild(path);
-            btn.appendChild(svg);
-        }
-    });
-    document.querySelectorAll('.btn-secondary').forEach(btn => {
-        if (!btn.querySelector('svg')) {
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('width', '16');
-            svg.setAttribute('height', '16');
-            svg.setAttribute('viewBox', '0 0 24 24');
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('stroke-width', '2');
-            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-            path.setAttribute('d', 'M6 9l6 6 6-6');
-            svg.appendChild(path);
-            btn.appendChild(svg);
-        }
-    });
+// ─── Language toggle ───
+let lang = 'pt';
+function setLang(l) {
+  lang = l;
+  document.getElementById('langPt').classList.toggle('active', l === 'pt');
+  document.getElementById('langEn').classList.toggle('active', l === 'en');
+  document.documentElement.lang = l === 'pt' ? 'pt-BR' : 'en';
+  document.querySelectorAll('[data-pt][data-en]').forEach(el => {
+    el.textContent = el.getAttribute('data-' + l);
+  });
 }
 
-// ─── NAVBAR SCROLL ───
-window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
-});
+// ─── Navbar scroll ───
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
 
-// ─── MOBILE NAV ───
-function toggleNav() {
-    document.getElementById('navLinks').classList.toggle('open');
+// ─── Close mobile nav on link click ───
+document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open')));
+
+// ─── Scroll reveal + count-up ───
+function countUp(el) {
+  const to = parseInt(el.getAttribute('data-to'), 10);
+  const prefix = el.getAttribute('data-prefix') || '';
+  const suffix = el.getAttribute('data-suffix') || '';
+  const dur = 1100, t0 = performance.now();
+  function frame(t) {
+    const p = Math.min((t - t0) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = Math.round(eased * to);
+    el.innerHTML = '<span>' + prefix + '</span>' + val + suffix;
+    if (p < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 }
 
-// ─── SCROLL REVEAL ───
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      e.target.querySelectorAll('[data-to]').forEach(countUp);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+// ─── Hero clause underline draw ───
+requestAnimationFrame(() => document.querySelector('.hero').classList.add('armed'));
 
-// ─── SMOOTH SCROLL (close mobile nav on click) ───
-document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
-    link.addEventListener('click', () => {
-        document.getElementById('navLinks').classList.remove('open');
+// ─── Radar (monitoring sweep) ───
+(function () {
+  const pipe = document.getElementById('pipe');
+  const svg = document.getElementById('pipeSvg');
+  const base = document.getElementById('pipeBase');
+  const glow = document.getElementById('pipeGlow');
+  if (!pipe || !svg) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nodes = [...pipe.querySelectorAll('.pipe-node')];
+  let pts = [], pathLen = 0, raf = null;
+
+  function buildPath() {
+    const pb = pipe.getBoundingClientRect();
+    svg.setAttribute('viewBox', '0 0 ' + pb.width + ' ' + pb.height);
+    pts = nodes.map(n => {
+      const r = n.querySelector('.pn-dot').getBoundingClientRect();
+      return { x: r.left + r.width/2 - pb.left, y: r.top + r.height/2 - pb.top };
     });
-});
+    if (pts.length < 2) return;
+    // smooth catmull-rom → cubic bezier
+    let d = 'M ' + pts[0].x + ' ' + pts[0].y;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i-1] || pts[i], p1 = pts[i], p2 = pts[i+1], p3 = pts[i+2] || p2;
+      const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+      const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ' C ' + c1x + ' ' + c1y + ', ' + c2x + ' ' + c2y + ', ' + p2.x + ' ' + p2.y;
+    }
+    base.setAttribute('d', d); glow.setAttribute('d', d);
+    pathLen = base.getTotalLength();
+    glow.style.strokeDasharray = pathLen;
+  }
+
+  function nearestNodeAt(dist) {
+    const pt = base.getPointAtLength(dist);
+    let best = -1, bd = 1e9;
+    pts.forEach((p, i) => { const dd = Math.hypot(p.x-pt.x, p.y-pt.y); if (dd < bd) { bd = dd; best = i; } });
+    return bd < 26 ? best : -1;
+  }
+
+  let t = 0;                         // 0..1 progress
+  const dur = 5200;                  // ms per full pass
+  let startTs = null, litUntil = -1;
+
+  function frame(ts) {
+    if (startTs == null) startTs = ts;
+    const elapsed = (ts - startTs) % (dur + 900);
+    t = Math.min(elapsed / dur, 1);
+    const dist = t * pathLen;
+    // reveal the glow segment up to the pulse
+    glow.style.strokeDashoffset = pathLen - dist;
+    // light nodes as pulse passes
+    const ni = nearestNodeAt(dist);
+    if (ni !== -1 && ni !== litUntil) {
+      for (let i = 0; i <= ni; i++) nodes[i].classList.add('lit');
+      nodes[ni].classList.add('ping');
+      setTimeout(() => nodes[ni] && nodes[ni].classList.remove('ping'), 600);
+      litUntil = ni;
+    }
+    if (elapsed > dur + 200 && litUntil !== -1) {
+      // reset for next loop
+      nodes.forEach(n => n.classList.remove('lit'));
+      litUntil = -1;
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function init() {
+    buildPath();
+    if (reduce) { nodes.forEach(n => n.classList.add('lit')); glow.style.strokeDashoffset = 0; return; }
+    cancelAnimationFrame(raf); startTs = null; litUntil = -1;
+    raf = requestAnimationFrame(frame);
+  }
+
+  // wait a tick for layout/fonts
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(init); else init();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(buildPath, 150); });
+})();
 </script>
 
 </body>
