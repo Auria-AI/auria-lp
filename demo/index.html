@@ -82,6 +82,19 @@
       background: var(--brand-glow);
       box-shadow: 0 0 12px var(--brand-glow);
     }
+    a.mark { text-decoration: none; transition: opacity 0.2s ease; }
+    a.mark:hover { opacity: 0.82; }
+
+    .back-home {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--ink-70); text-decoration: none;
+      padding: 9px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 100px;
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .back-home:hover { color: var(--ink-100); border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.04); }
 
     .center {
       display: flex; flex-direction: column;
@@ -323,8 +336,11 @@
   <main class="stage" id="stage" data-state="idle">
 
     <header class="topbar">
-      <div class="mark"><span class="dot"></span> Auria</div>
-      <div>Demonstração ao vivo</div>
+      <a class="mark" href="/" aria-label="Voltar para a página inicial da Auria"><span class="dot"></span> Auria</a>
+      <a class="back-home" href="/" aria-label="Voltar para o site da Auria">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Voltar ao site
+      </a>
     </header>
 
     <section class="center">
@@ -413,6 +429,9 @@
             <button class="primary" id="restartButton" type="button" style="max-width: 320px;">
               Recomeçar
             </button>
+            <div style="margin-top: 16px;">
+              <a class="back-home" href="/">Conhecer a Auria</a>
+            </div>
           </div>
         </div>
 
