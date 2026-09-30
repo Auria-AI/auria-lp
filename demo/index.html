@@ -255,13 +255,59 @@
     }
     .error-banner.show { display: block; }
 
+    /* ─── Demo chooser ─── */
+    .choice-grid {
+      width: min(720px, 100%);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .choice-card {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+      padding: 28px 24px; text-align: left;
+      font-family: inherit; color: var(--ink-100); text-decoration: none;
+      background: var(--surface-glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px; cursor: pointer;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
+      transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+    .choice-card:hover { transform: translateY(-2px); border-color: rgba(161, 85, 255, 0.45); background: rgba(255, 255, 255, 0.08); }
+    .choice-card:focus-visible { outline: none; border-color: var(--brand-glow); box-shadow: 0 0 0 4px rgba(161, 85, 255, 0.25); }
+    .choice-icon {
+      width: 44px; height: 44px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--brand-glow) 0%, var(--brand-primary) 100%);
+      box-shadow: 0 8px 24px rgba(108, 13, 201, 0.40);
+    }
+    .choice-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+    .choice-desc  { font-size: 14px; line-height: 1.55; color: var(--ink-70); }
+    .choice-cta {
+      margin-top: auto; padding-top: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--brand-glow);
+    }
+    .switch-demo {
+      font-family: inherit; font-size: 13px; color: var(--ink-50);
+      background: none; border: none; padding: 8px; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+    .switch-demo:hover { color: var(--ink-100); }
+
+    @media (max-width: 600px) {
+      .choice-grid { grid-template-columns: 1fr; }
+      .choice-card { padding: 22px 20px; }
+    }
+
     /* ─── State-driven visibility ─── */
     [data-show-when] { display: none; }
+    .stage[data-state="choose"]     [data-show-when~="choose"],
     .stage[data-state="idle"]       [data-show-when~="idle"],
     .stage[data-state="connecting"] [data-show-when~="connecting"],
     .stage[data-state="listening"]  [data-show-when~="active"],
     .stage[data-state="speaking"]   [data-show-when~="active"],
     .stage[data-state="ended"]      [data-show-when~="ended"]      { display: block; }
+    .stage[data-state="choose"]     [data-show-when~="choose-grid"] { display: grid; }
     .stage[data-state="idle"]       [data-show-when~="idle-flex"],
     .stage[data-state="connecting"] [data-show-when~="connecting-flex"],
     .stage[data-state="listening"]  [data-show-when~="active-flex"],
@@ -333,7 +379,7 @@
   </style>
 </head>
 <body>
-  <main class="stage" id="stage" data-state="idle">
+  <main class="stage" id="stage" data-state="choose">
 
     <header class="topbar">
       <a class="mark" href="/" aria-label="Voltar para a página inicial da Auria"><span class="dot"></span> Auria</a>
@@ -344,6 +390,33 @@
     </header>
 
     <section class="center">
+
+      <!-- CHOOSE: pick which demo to try -->
+      <div data-show-when="choose">
+        <p class="eyebrow">Experimente em primeira mão</p>
+      </div>
+      <h1 data-show-when="choose">
+        Qual demo você quer ver?
+      </h1>
+
+      <div class="choice-grid" data-show-when="choose-grid">
+        <button type="button" class="choice-card" id="chooseAlarme">
+          <span class="choice-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          </span>
+          <span class="choice-title">Alarme</span>
+          <span class="choice-desc">Atenda uma ligação da Auria sobre um disparo de alarme, com câmeras ao vivo.</span>
+          <span class="choice-cta">Começar →</span>
+        </button>
+        <a class="choice-card" id="choosePortaria" href="https://portaria.auria-ai.com.br/">
+          <span class="choice-icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg>
+          </span>
+          <span class="choice-title">Portaria</span>
+          <span class="choice-desc">Veja a Auria atendendo a portaria remota de um condomínio.</span>
+          <span class="choice-cta">Abrir demo →</span>
+        </a>
+      </div>
 
       <!-- IDLE: form -->
       <div data-show-when="idle">
@@ -374,6 +447,10 @@
       <p class="hint" data-show-when="idle">
         Permita o acesso ao microfone quando o navegador solicitar. A conversa fica apenas entre você e a Auria — nenhum dado pessoal é armazenado.
       </p>
+
+      <button type="button" class="switch-demo" id="switchDemo" data-show-when="idle">
+        Escolher outra demo
+      </button>
 
       <!-- Error banner: globally visible across all states -->
       <div
@@ -492,7 +569,7 @@
     function setState(next) {
       stage.dataset.state = next;
       orbWrap.classList.remove("idle", "connecting", "listening", "speaking", "ended");
-      if (next !== "idle") orbWrap.classList.add(next);
+      if (next !== "idle" && next !== "choose") orbWrap.classList.add(next);
       const labels = {
         idle:       "Aguardando…",
         connecting: "Conectando com a Auria…",
@@ -787,7 +864,30 @@
       visitorNameInput.focus();
     });
 
-    setState("idle");
+    // ── Demo chooser ──────────────────────────────────────────────────────────
+    // /demo opens on a chooser (the event QR code points here). "Alarme" enters
+    // the call flow above on this same URL; "Portaria" is a plain link to the
+    // separate portaria demo. A same-URL history entry lets the phone's back
+    // button return from the Alarme form to the chooser.
+    document.getElementById("chooseAlarme").addEventListener("click", () => {
+      history.pushState({ demo: "alarme" }, "");
+      setState("idle");
+    });
+
+    document.getElementById("switchDemo").addEventListener("click", () => history.back());
+
+    window.addEventListener("popstate", () => {
+      const s = stage.dataset.state;
+      if (s !== "idle" && s !== "ended") {
+        // Mid-call: keep the call on screen and restore the history entry.
+        history.pushState({ demo: "alarme" }, "");
+        return;
+      }
+      clearError();
+      setState(history.state?.demo === "alarme" ? "idle" : "choose");
+    });
+
+    setState(history.state?.demo === "alarme" ? "idle" : "choose");
   </script>
 </body>
 </html>
