@@ -1,9 +1,9 @@
 name: Deploy to Vercel
 
+# Production deploys come from the Vercel Git integration on every push to
+# main. This workflow only runs when triggered manually from the Actions tab.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
