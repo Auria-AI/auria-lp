@@ -422,19 +422,19 @@
         <div class="lead-field">
           <input id="leadName" name="name" type="text" placeholder="Nome completo"
             aria-label="Nome completo" aria-describedby="leadNameError"
-            autocomplete="name" maxlength="100" required />
+            autocomplete="off" maxlength="100" required />
           <span class="field-error" id="leadNameError"></span>
         </div>
         <div class="lead-field">
           <input id="leadCompany" name="company" type="text" placeholder="Empresa"
             aria-label="Empresa" aria-describedby="leadCompanyError"
-            autocomplete="organization" maxlength="100" required />
+            autocomplete="off" maxlength="100" required />
           <span class="field-error" id="leadCompanyError"></span>
         </div>
         <div class="lead-field">
           <input id="leadPhone" name="phone" type="tel" placeholder="Celular com DDD"
             aria-label="Celular com DDD" aria-describedby="leadPhoneError"
-            autocomplete="tel-national" inputmode="numeric" maxlength="16" required />
+            autocomplete="off" inputmode="numeric" maxlength="16" required />
           <span class="field-error" id="leadPhoneError"></span>
         </div>
         <div class="lead-trap" aria-hidden="true">
@@ -914,25 +914,21 @@
     });
 
     restartButton.addEventListener("click", () => {
-      clearError();
-      visitorNameInput.value = "";
       startButton.disabled = false;
-      setState("idle");
-      visitorNameInput.focus();
+      showLeadForm();
     });
 
     // ── Lead capture ──────────────────────────────────────────────────────────
-    // /demo opens on a short form (name, company, phone) before the chooser.
+    // Every demo starts with a short form (name, company, phone) before the
+    // chooser — on load, after "Recomeçar" and when coming back from the
+    // portaria demo — since the event stand runs all demos on one computer.
     // Leads go to a Google Sheet through an Apps Script web app (source in
     // scripts/leads-apps-script.gs). Sending never blocks the demo: payloads
     // sit in a localStorage queue until a POST goes through, so a flaky event
-    // Wi-Fi only delays them. ?kiosk=1 (stand tablet) asks every visitor;
-    // otherwise a returning visitor skips the form. ?src= tags the lead origin.
+    // Wi-Fi only delays them. ?src= tags the lead origin.
     const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbx5U68sCEH7KXgAVowkE29s60NZSOUU2wNQhPFnjha0a79h33EERXnth4sq-gfs5Y1-/exec";
     const params   = new URLSearchParams(location.search);
-    const KIOSK    = params.has("kiosk");
     const SOURCE   = (params.get("src") || "site").slice(0, 40);
-    const LEAD_KEY  = "auria_demo_lead";
     const QUEUE_KEY = "auria_demo_lead_queue";
 
     const leadForm    = document.getElementById("leadForm");
@@ -948,8 +944,7 @@
       try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
     }
 
-    // In kiosk mode the lead only lives for this page view.
-    let lead = KIOSK ? null : storageGet(LEAD_KEY);
+    let lead = null;
 
     let flushing = false;
     async function flushQueue() {
@@ -1019,7 +1014,6 @@
       if (firstInvalid) { firstInvalid[0].focus(); return; }
 
       lead = { id: crypto.randomUUID(), name };
-      if (!KIOSK) storageSet(LEAD_KEY, lead);
       sendLead({
         type: "lead", id: lead.id, name, company, phone,
         source: SOURCE, ua: navigator.userAgent, website: leadWebsite.value,
@@ -1056,12 +1050,21 @@
       setState(history.state?.demo === "alarme" ? "idle" : "choose");
     });
 
-    if (lead) {
-      visitorNameInput.value = lead.name.split(" ")[0];
-      setState(history.state?.demo === "alarme" ? "idle" : "choose");
-    } else {
+    function showLeadForm() {
+      lead = null;
+      leadForm.reset();
+      [leadName, leadCompany, leadPhone].forEach((input) => setFieldError(input, ""));
+      visitorNameInput.value = "";
+      clearError();
+      history.replaceState(null, "");
       setState("lead");
     }
+
+    // Back from the portaria demo restores this page from the bfcache with the
+    // previous visitor's state; start over for the next one.
+    window.addEventListener("pageshow", (e) => { if (e.persisted) showLeadForm(); });
+
+    showLeadForm();
     flushQueue();
   </script>
 </body>
