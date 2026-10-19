@@ -310,6 +310,7 @@
       text-decoration: underline; text-underline-offset: 3px;
     }
     .switch-demo:hover { color: var(--ink-100); }
+    .demo-switch { align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
 
     @media (max-width: 600px) {
       .choice-grid { grid-template-columns: 1fr; }
@@ -505,9 +506,12 @@
         Permita o acesso ao microfone quando o navegador solicitar. A conversa fica apenas entre você e a Auria.
       </p>
 
-      <button type="button" class="switch-demo" id="switchDemo" data-show-when="idle">
-        Escolher outra demo
-      </button>
+      <div class="demo-switch" data-show-when="idle-flex">
+        <button type="button" class="switch-demo" id="switchDemo">
+          Escolher outra demo
+        </button>
+        <a class="back-home portaria-link" href="https://portaria.auria-ai.com.br/">Trocar para demo de Portaria →</a>
+      </div>
 
       <!-- Error banner: globally visible across all states -->
       <div
@@ -563,7 +567,8 @@
             <button class="primary" id="restartButton" type="button" style="max-width: 320px;">
               Recomeçar
             </button>
-            <div style="margin-top: 16px;">
+            <div class="demo-switch" style="display: flex; margin-top: 16px;">
+              <a class="back-home portaria-link" href="https://portaria.auria-ai.com.br/">Demo de Portaria →</a>
               <a class="back-home" href="/">Conhecer a Auria</a>
             </div>
           </div>
@@ -920,8 +925,11 @@
 
     // ── Lead capture ──────────────────────────────────────────────────────────
     // Every demo starts with a short form (name, company, phone) before the
-    // chooser — on load, after "Recomeçar" and when coming back from the
+    // chooser — on load, after "Recomeçar" and on a browser "back" from the
     // portaria demo — since the event stand runs all demos on one computer.
+    // The one exception is switching demos on purpose: the portaria page links
+    // back with ?demo=alarme|inicio, and a lead this tab filled in within the
+    // last 30 minutes (sessionStorage, so per tab) is reused instead of asked again.
     // Leads go to a Google Sheet through an Apps Script web app (source in
     // scripts/leads-apps-script.gs). Sending never blocks the demo: payloads
     // sit in a localStorage queue until a POST goes through, so a flaky event
@@ -930,6 +938,9 @@
     const params   = new URLSearchParams(location.search);
     const SOURCE   = (params.get("src") || "site").slice(0, 40);
     const QUEUE_KEY = "auria_demo_lead_queue";
+    const VISITOR_KEY = "auria_demo_visitor";
+    const VISITOR_TTL_MS = 30 * 60 * 1000;
+    const SWITCH_TO = params.get("demo"); // "alarme" | "inicio" when coming from the portaria demo
 
     const leadForm    = document.getElementById("leadForm");
     const leadName    = document.getElementById("leadName");
@@ -1013,15 +1024,28 @@
       const firstInvalid = errors.find(([, msg]) => msg);
       if (firstInvalid) { firstInvalid[0].focus(); return; }
 
-      lead = { id: crypto.randomUUID(), name };
+      lead = { id: crypto.randomUUID(), name, at: Date.now() };
+      try { sessionStorage.setItem(VISITOR_KEY, JSON.stringify(lead)); } catch (_) {}
       sendLead({
         type: "lead", id: lead.id, name, company, phone,
         source: SOURCE, ua: navigator.userAgent, website: leadWebsite.value,
       });
 
-      visitorNameInput.value = name.split(" ")[0];
-      setState("choose");
+      enterDemo(SWITCH_TO);
     });
+
+    // Lands the current lead on the chooser, or straight on the alarm demo.
+    // The chooser stays underneath so "Escolher outra demo" (history.back) works.
+    function enterDemo(demo) {
+      visitorNameInput.value = lead.name.split(" ")[0];
+      history.replaceState(null, "", location.pathname + (SOURCE !== "site" ? `?src=${encodeURIComponent(SOURCE)}` : ""));
+      setState("choose");
+      if (demo === "alarme") {
+        trackChoice("alarme");
+        history.pushState({ demo: "alarme" }, "");
+        setState("idle");
+      }
+    }
 
     // ── Demo chooser ──────────────────────────────────────────────────────────
     // After the lead form, /demo shows a chooser (the event QR code points
@@ -1034,7 +1058,8 @@
       setState("idle");
     });
 
-    document.getElementById("choosePortaria").addEventListener("click", () => trackChoice("portaria"));
+    document.querySelectorAll("#choosePortaria, .portaria-link").forEach((link) =>
+      link.addEventListener("click", () => trackChoice("portaria")));
 
     document.getElementById("switchDemo").addEventListener("click", () => history.back());
 
@@ -1052,6 +1077,7 @@
 
     function showLeadForm() {
       lead = null;
+      try { sessionStorage.removeItem(VISITOR_KEY); } catch (_) {}
       leadForm.reset();
       [leadName, leadCompany, leadPhone].forEach((input) => setFieldError(input, ""));
       visitorNameInput.value = "";
@@ -1064,7 +1090,14 @@
     // previous visitor's state; start over for the next one.
     window.addEventListener("pageshow", (e) => { if (e.persisted) showLeadForm(); });
 
-    showLeadForm();
+    let returning = null;
+    try { returning = JSON.parse(sessionStorage.getItem(VISITOR_KEY)); } catch (_) {}
+    if (SWITCH_TO && returning?.id && Date.now() - returning.at < VISITOR_TTL_MS) {
+      lead = returning;
+      enterDemo(SWITCH_TO);
+    } else {
+      showLeadForm();
+    }
     flushQueue();
   </script>
 </body>
