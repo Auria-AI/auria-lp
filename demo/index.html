@@ -204,7 +204,8 @@
       display: flex; flex-direction: column; gap: 16px;
     }
 
-    .start-card input[type="text"] {
+    .start-card input[type="text"],
+    .start-card input[type="tel"] {
       width: 100%; padding: 16px 18px;
       font-family: inherit; font-size: 16px; color: var(--ink-100);
       background: rgba(0, 0, 0, 0.30);
@@ -212,8 +213,10 @@
       border-radius: 14px; outline: none;
       transition: border-color 0.2s ease, background 0.2s ease;
     }
-    .start-card input[type="text"]::placeholder { color: var(--ink-30); }
-    .start-card input[type="text"]:focus {
+    .start-card input::placeholder { color: var(--ink-30); }
+    .start-card input[aria-invalid="true"] { border-color: rgba(253, 164, 175, 0.70); }
+    .start-card input[type="text"]:focus,
+    .start-card input[type="tel"]:focus {
       border-color: var(--brand-glow);
       background: rgba(0, 0, 0, 0.45);
       box-shadow: 0 0 0 4px rgba(161, 85, 255, 0.15);
@@ -254,6 +257,13 @@
       font-size: 13px; display: none; text-align: left;
     }
     .error-banner.show { display: block; }
+
+    /* ─── Lead form ─── */
+    .lead-field { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+    .field-error { font-size: 12px; color: #fda4af; min-height: 0; }
+    .field-error:empty { display: none; }
+    .lead-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .consent { margin: 0; font-size: 12px; line-height: 1.5; color: var(--ink-50); }
 
     /* ─── Demo chooser ─── */
     .choice-grid {
@@ -308,6 +318,7 @@
 
     /* ─── State-driven visibility ─── */
     [data-show-when] { display: none; }
+    .stage[data-state="lead"]       [data-show-when~="lead"],
     .stage[data-state="choose"]     [data-show-when~="choose"],
     .stage[data-state="idle"]       [data-show-when~="idle"],
     .stage[data-state="connecting"] [data-show-when~="connecting"],
@@ -315,6 +326,7 @@
     .stage[data-state="speaking"]   [data-show-when~="active"],
     .stage[data-state="ended"]      [data-show-when~="ended"]      { display: block; }
     .stage[data-state="choose"]     [data-show-when~="choose-grid"] { display: grid; }
+    .stage[data-state="lead"]       [data-show-when~="lead-flex"],
     .stage[data-state="idle"]       [data-show-when~="idle-flex"],
     .stage[data-state="connecting"] [data-show-when~="connecting-flex"],
     .stage[data-state="listening"]  [data-show-when~="active-flex"],
@@ -386,7 +398,7 @@
   </style>
 </head>
 <body>
-  <main class="stage" id="stage" data-state="choose">
+  <main class="stage" id="stage" data-state="lead">
 
     <header class="topbar">
       <a class="mark" href="/" aria-label="Voltar para a página inicial da Auria"><span class="dot"></span> Auria</a>
@@ -397,6 +409,44 @@
     </header>
 
     <section class="center">
+
+      <!-- LEAD: contact details before any demo -->
+      <div data-show-when="lead">
+        <p class="eyebrow">Experimente em primeira mão</p>
+      </div>
+      <h1 data-show-when="lead">
+        Converse com a Auria<br />ao vivo.
+      </h1>
+
+      <form class="start-card" id="leadForm" data-show-when="lead-flex" novalidate>
+        <div class="lead-field">
+          <input id="leadName" name="name" type="text" placeholder="Nome completo"
+            aria-label="Nome completo" aria-describedby="leadNameError"
+            autocomplete="name" maxlength="100" required />
+          <span class="field-error" id="leadNameError"></span>
+        </div>
+        <div class="lead-field">
+          <input id="leadCompany" name="company" type="text" placeholder="Empresa"
+            aria-label="Empresa" aria-describedby="leadCompanyError"
+            autocomplete="organization" maxlength="100" required />
+          <span class="field-error" id="leadCompanyError"></span>
+        </div>
+        <div class="lead-field">
+          <input id="leadPhone" name="phone" type="tel" placeholder="Celular com DDD"
+            aria-label="Celular com DDD" aria-describedby="leadPhoneError"
+            autocomplete="tel-national" inputmode="numeric" maxlength="16" required />
+          <span class="field-error" id="leadPhoneError"></span>
+        </div>
+        <div class="lead-trap" aria-hidden="true">
+          <input id="leadWebsite" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="primary">Seguir</button>
+
+        <p class="consent">
+          Ao continuar, você concorda em ser contatado pela Auria sobre nossos produtos.
+        </p>
+      </form>
 
       <!-- CHOOSE: pick which demo to try -->
       <div data-show-when="choose">
@@ -452,7 +502,7 @@
       </form>
 
       <p class="hint" data-show-when="idle">
-        Permita o acesso ao microfone quando o navegador solicitar. A conversa fica apenas entre você e a Auria — nenhum dado pessoal é armazenado.
+        Permita o acesso ao microfone quando o navegador solicitar. A conversa fica apenas entre você e a Auria.
       </p>
 
       <button type="button" class="switch-demo" id="switchDemo" data-show-when="idle">
@@ -576,7 +626,7 @@
     function setState(next) {
       stage.dataset.state = next;
       orbWrap.classList.remove("idle", "connecting", "listening", "speaking", "ended");
-      if (next !== "idle" && next !== "choose") orbWrap.classList.add(next);
+      if (next !== "idle" && next !== "choose" && next !== "lead") orbWrap.classList.add(next);
       const labels = {
         idle:       "Aguardando…",
         connecting: "Conectando com a Auria…",
@@ -871,15 +921,126 @@
       visitorNameInput.focus();
     });
 
+    // ── Lead capture ──────────────────────────────────────────────────────────
+    // /demo opens on a short form (name, company, phone) before the chooser.
+    // Leads go to a Google Sheet through an Apps Script web app (source in
+    // scripts/leads-apps-script.gs). Sending never blocks the demo: payloads
+    // sit in a localStorage queue until a POST goes through, so a flaky event
+    // Wi-Fi only delays them. ?kiosk=1 (stand tablet) asks every visitor;
+    // otherwise a returning visitor skips the form. ?src= tags the lead origin.
+    const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbx5U68sCEH7KXgAVowkE29s60NZSOUU2wNQhPFnjha0a79h33EERXnth4sq-gfs5Y1-/exec";
+    const params   = new URLSearchParams(location.search);
+    const KIOSK    = params.has("kiosk");
+    const SOURCE   = (params.get("src") || "site").slice(0, 40);
+    const LEAD_KEY  = "auria_demo_lead";
+    const QUEUE_KEY = "auria_demo_lead_queue";
+
+    const leadForm    = document.getElementById("leadForm");
+    const leadName    = document.getElementById("leadName");
+    const leadCompany = document.getElementById("leadCompany");
+    const leadPhone   = document.getElementById("leadPhone");
+    const leadWebsite = document.getElementById("leadWebsite");
+
+    function storageGet(key) {
+      try { return JSON.parse(localStorage.getItem(key)); } catch (_) { return null; }
+    }
+    function storageSet(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
+    }
+
+    // In kiosk mode the lead only lives for this page view.
+    let lead = KIOSK ? null : storageGet(LEAD_KEY);
+
+    let flushing = false;
+    async function flushQueue() {
+      if (!LEAD_ENDPOINT || flushing) return;
+      flushing = true;
+      try {
+        let queue = storageGet(QUEUE_KEY) || [];
+        while (queue.length) {
+          // text/plain keeps this a "simple" request (no CORS preflight, which
+          // Apps Script doesn't answer). The response is opaque; a network
+          // failure still rejects, which is what we retry on.
+          await fetch(LEAD_ENDPOINT, {
+            method: "POST", mode: "no-cors", keepalive: true,
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(queue[0]),
+          });
+          queue = (storageGet(QUEUE_KEY) || []).slice(1);
+          storageSet(QUEUE_KEY, queue);
+        }
+      } catch (_) {
+        setTimeout(flushQueue, 15000);
+      } finally {
+        flushing = false;
+      }
+    }
+
+    function sendLead(payload) {
+      const queue = storageGet(QUEUE_KEY) || [];
+      queue.push(payload);
+      storageSet(QUEUE_KEY, queue);
+      flushQueue();
+    }
+
+    function trackChoice(demo) {
+      if (lead) sendLead({ type: "choice", id: lead.id, demo });
+    }
+
+    function formatPhone(digits) {
+      const d = digits.slice(0, 11);
+      if (d.length <= 2)  return d.length ? `(${d}` : "";
+      if (d.length <= 7)  return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+      return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+    }
+
+    leadPhone.addEventListener("input", () => {
+      leadPhone.value = formatPhone(leadPhone.value.replace(/\D/g, ""));
+    });
+
+    function setFieldError(input, msg) {
+      input.setAttribute("aria-invalid", msg ? "true" : "false");
+      document.getElementById(input.getAttribute("aria-describedby")).textContent = msg;
+    }
+
+    leadForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name    = leadName.value.trim().replace(/\s+/g, " ");
+      const company = leadCompany.value.trim();
+      const phone   = leadPhone.value.replace(/\D/g, "");
+
+      const errors = [
+        [leadName,    name.split(" ").length < 2 ? "Informe seu nome e sobrenome." : ""],
+        [leadCompany, company ? "" : "Informe sua empresa."],
+        [leadPhone,   /^\d{2}9\d{8}$/.test(phone) ? "" : "Informe um celular com DDD, ex.: (11) 91234-5678."],
+      ];
+      errors.forEach(([input, msg]) => setFieldError(input, msg));
+      const firstInvalid = errors.find(([, msg]) => msg);
+      if (firstInvalid) { firstInvalid[0].focus(); return; }
+
+      lead = { id: crypto.randomUUID(), name };
+      if (!KIOSK) storageSet(LEAD_KEY, lead);
+      sendLead({
+        type: "lead", id: lead.id, name, company, phone,
+        source: SOURCE, ua: navigator.userAgent, website: leadWebsite.value,
+      });
+
+      visitorNameInput.value = name.split(" ")[0];
+      setState("choose");
+    });
+
     // ── Demo chooser ──────────────────────────────────────────────────────────
-    // /demo opens on a chooser (the event QR code points here). "Alarme" enters
-    // the call flow above on this same URL; "Portaria" is a plain link to the
-    // separate portaria demo. A same-URL history entry lets the phone's back
-    // button return from the Alarme form to the chooser.
+    // After the lead form, /demo shows a chooser (the event QR code points
+    // here). "Alarme" enters the call flow above on this same URL; "Portaria"
+    // is a plain link to the separate portaria demo. A same-URL history entry
+    // lets the phone's back button return from the Alarme form to the chooser.
     document.getElementById("chooseAlarme").addEventListener("click", () => {
+      trackChoice("alarme");
       history.pushState({ demo: "alarme" }, "");
       setState("idle");
     });
+
+    document.getElementById("choosePortaria").addEventListener("click", () => trackChoice("portaria"));
 
     document.getElementById("switchDemo").addEventListener("click", () => history.back());
 
@@ -891,10 +1052,17 @@
         return;
       }
       clearError();
+      if (!lead) { setState("lead"); return; }
       setState(history.state?.demo === "alarme" ? "idle" : "choose");
     });
 
-    setState(history.state?.demo === "alarme" ? "idle" : "choose");
+    if (lead) {
+      visitorNameInput.value = lead.name.split(" ")[0];
+      setState(history.state?.demo === "alarme" ? "idle" : "choose");
+    } else {
+      setState("lead");
+    }
+    flushQueue();
   </script>
 </body>
 </html>
