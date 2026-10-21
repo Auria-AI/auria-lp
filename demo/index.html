@@ -387,6 +387,46 @@
       .ring.r3 { inset: 36px; }
     }
 
+    /* ─── Phone call screen ───
+       The whole call fits one screen: both cameras side by side on top (tap
+       one to see it full width), the orb and its controls under them. Stacked
+       cameras pushed the second one below the fold, and the desktop-sized orb
+       and glow swallowed the screen while the Auria spoke. */
+    @media (max-width: 600px) {
+      .stage { padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); min-height: 100dvh; }
+      .topbar { font-size: 12px; }
+      .back-home { padding: 8px 12px; font-size: 11px; letter-spacing: 0.12em; }
+      .center { gap: 24px; padding: 24px 0; }
+      .stage:is([data-state="connecting"], [data-state="listening"], [data-state="speaking"], [data-state="ended"]) .center {
+        justify-content: flex-start; padding-top: 12px;
+      }
+      .stage:is([data-state="connecting"], [data-state="listening"], [data-state="speaking"], [data-state="ended"]) .call-scene {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px 10px;
+        grid-template-areas: "street hall" "orb orb";
+        align-items: start;
+      }
+      #cameraMonitorStreet { grid-area: street; }
+      #cameraMonitorHall   { grid-area: hall; }
+      .orb-column { grid-area: orb; gap: 16px; margin-top: 8px; }
+      .camera-monitor { width: 100%; min-width: 0; margin: 0; cursor: zoom-in; }
+      #cameraMonitorStreet.expanded,
+      #cameraMonitorHall.expanded { grid-area: 1 / 1 / 2 / -1; cursor: zoom-out; }
+      .call-scene:has(.camera-monitor.expanded) .camera-monitor:not(.expanded) { display: none; }
+      .camera-video { width: 100%; max-width: none; border-radius: 8px; }
+      .camera-label { font-size: 9.5px; letter-spacing: 0.08em; line-height: 1.3; min-height: 2.6em; text-align: center; justify-content: center; }
+      .camera-label .cam-long { display: none; }
+      .orb-wrap { width: 168px; height: 168px; }
+      .orb { inset: 38px; }
+      .ring.r1 { inset: 18px; }
+      .ring.r3 { inset: 28px; }
+      .status { font-size: 12px; letter-spacing: 0.16em; }
+      .end-call { min-height: 44px; }
+      footer { padding-top: 12px; }
+      .orb { box-shadow: 0 0 36px rgba(161, 85, 255, 0.5), 0 0 70px rgba(108, 13, 201, 0.35), inset 0 0 28px rgba(255, 255, 255, 0.15); }
+      .orb-wrap.listening .orb { box-shadow: 0 0 32px rgba(52, 211, 160, 0.42), 0 0 64px rgba(10, 130, 89, 0.28), inset 0 0 28px rgba(255, 255, 255, 0.15); }
+    }
+    @media (min-width: 601px) { .camera-label .cam-short { display: none; } }
+
     footer {
       color: var(--ink-30); font-size: 12px; letter-spacing: 0.16em;
       text-transform: uppercase; text-align: center; padding-top: 24px;
@@ -529,7 +569,8 @@
         <figure class="camera-monitor" id="cameraMonitorStreet" data-show-when="active-flex">
           <figcaption class="camera-label">
             <span class="rec-dot" aria-hidden="true"></span>
-            <span>Câmera externa — rua em frente à loja</span>
+            <span class="cam-long">Câmera externa — rua em frente à loja</span>
+            <span class="cam-short">Rua em frente à loja</span>
           </figcaption>
           <video
             class="camera-video"
@@ -578,7 +619,8 @@
         <figure class="camera-monitor" id="cameraMonitorHall" data-show-when="active-flex">
           <figcaption class="camera-label">
             <span class="rec-dot" aria-hidden="true"></span>
-            <span>Câmera interna — salão de atendimento</span>
+            <span class="cam-long">Câmera interna — salão de atendimento</span>
+            <span class="cam-short">Salão da loja</span>
           </figcaption>
           <video
             class="camera-video"
@@ -667,13 +709,16 @@
         const k = raw > smoothedVolume ? SMOOTHING_ATTACK : SMOOTHING_RELEASE;
         smoothedVolume += (raw - smoothedVolume) * k;
         const c  = Math.pow(Math.min(smoothedVolume, 1), 0.55);
-        const og = 55 + c * 90, oa = 0.45 + c * 0.45;
-        orb.style.transform  = `scale(${(0.88 + c * 0.45).toFixed(3)})`;
+        // The swing and the glow were tuned on the 280px desktop orb; on a
+        // smaller one they shrink with it, or the pulse floods a phone screen.
+        const size = Math.min(1, orbWrap.clientWidth / 280);
+        const og = (55 + c * 90) * size, oa = 0.45 + c * 0.45;
+        orb.style.transform  = `scale(${(0.88 + c * (size < 1 ? 0.28 : 0.45)).toFixed(3)})`;
         orb.style.filter     = `brightness(${(0.95 + c * 0.55).toFixed(3)})`;
         orb.style.boxShadow  =
           `0 0 ${og.toFixed(0)}px rgba(161,85,255,${oa.toFixed(2)}),` +
           `0 0 ${(og*1.8).toFixed(0)}px rgba(108,13,201,${(oa*0.6).toFixed(2)}),` +
-          `inset 0 0 ${(30+c*30).toFixed(0)}px rgba(255,255,255,${(0.15+c*0.2).toFixed(2)})`;
+          `inset 0 0 ${((30+c*30)*size).toFixed(0)}px rgba(255,255,255,${(0.15+c*0.2).toFixed(2)})`;
         volumeRAF = requestAnimationFrame(tick);
       };
       volumeRAF = requestAnimationFrame(tick);
@@ -717,6 +762,14 @@
         vid.play().catch(err => console.warn("Vision video autoplay blocked:", err));
       }
       startDebugOverlay();
+    }
+
+    // Phone: a tap shows that camera full width; another tap restores the pair.
+    for (const fig of [document.getElementById("cameraMonitorStreet"), document.getElementById("cameraMonitorHall")]) {
+      fig.addEventListener("click", () => {
+        if (!window.matchMedia("(max-width: 600px)").matches) return;
+        fig.classList.toggle("expanded");
+      });
     }
 
     function stopVisionPlayback() {
